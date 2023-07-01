@@ -1,7 +1,7 @@
 CC = gcc
 LD = gcc
-CFLAGS = -g -march=core2 -mtune=core2 -Isrc/include -std=gnu2x
-LDFLAGS =
+CFLAGS = -O3 -g -Isrc/include -std=gnu2x -flto
+LDFLAGS = -flto
 
 compile = $(patsubst src/%.c,build/%.o,$(shell find src -name '*.c'))
 
