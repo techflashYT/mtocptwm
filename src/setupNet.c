@@ -1,57 +1,79 @@
+#ifdef PLAT_LINUX
 #include <sys/socket.h>
 #include <sys/ioctl.h>
 #include <net/if.h>
 #include <arpa/inet.h>
+#endif
+
+#ifdef PLAT_WII
+#include <network.h>
+#endif
+
+#ifdef PLAT_WIN
+#include <winsock2.h>
+#endif
 
 #include <unistd.h>
 #include <stdbool.h>
 #include <string.h>
 #include <stdlib.h>
 #include <stdio.h>
-
+#include <errno.h>
+#include <stdint.h>
 struct sockaddr_in addr;
-int addrlen, sock;
-struct ip_mreq mreq;
+uint32_t addrlen;
 
+#include <mtocptwm.h>
 
-int portNum = 6000;
-char *multicastIP = "239.0.0.1";
+netInfo_t netInfo;
 
-char localIP[17];
-
-static void getLocalIP();
 static void setupMulticastSocket();
-
+static void getHostname();
 void setupNet() {
 	setupMulticastSocket();
-	getLocalIP();
+	getHostname();
 }
 
 static void setupMulticastSocket() {
-	sock = socket(AF_INET, SOCK_DGRAM, 0);
-	if (sock < 0) {
-		perror("socket");
+	netInfo.multicastIP = "239.0.0.1";
+	netInfo.multicastListenPort = 6000;
+	netInfo.socket = 
+	#ifdef PLAT_WII
+		net_socket(PF_INET, SOCK_DGRAM, IPPROTO_IP);
+	#endif
+	#if defined(PLAT_LINUX) || defined(PLAT_WIN)
+		socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP);
+	#endif
+	if (netInfo.socket < 0) {
+		#ifdef PLAT_WII
+		errno = netInfo.socket;
+		#endif
+			
+		perror("socket err");
+		printf("returned: %d", netInfo.socket);
 		exit(1);
 	}
-	bzero((char *)&addr, sizeof(addr));
+	memset((char *)&addr, 0, sizeof(addr));
 	addr.sin_family = AF_INET;
 	addr.sin_addr.s_addr = htonl(INADDR_ANY);
-	addr.sin_port = htons(portNum);
+	addr.sin_port = htons(netInfo.multicastListenPort);
+	#ifdef PLAT_WII
+	addr.sin_len = 8; // weird hack to fix libogc
+	#endif
 	addrlen = sizeof(addr);
 }
+static void getHostname() {
+	#ifdef PLAT_WII
+	strcpy(netInfo.name, "Nintendo_Wii");
+	#endif
 
-static void getLocalIP() {
-	int fd;
-	struct ifreq ifr;
-	fd = socket(AF_INET, SOCK_DGRAM, 0);
+	#ifdef PLAT_LINUX
+	gethostname(netInfo.name, 64);
 
-	// only IPv4
-	ifr.ifr_addr.sa_family = AF_INET;
-	strncpy(ifr.ifr_name, "eth0", IFNAMSIZ - 1);
-
-	ioctl(fd, SIOCGIFADDR, &ifr);
-	close(fd);
-
-	// save the local IP address
-	strcpy(localIP, inet_ntoa(((struct sockaddr_in *)&ifr.ifr_addr)->sin_addr));
+	// POSIX standard says that if the name is truncated,
+	// it might not include a null terminator.
+	// Nobody sane would use a hostname > 64 characters,
+	// but just in case, add one.
+	netInfo.name[63] = '\0';
+	#endif
 }

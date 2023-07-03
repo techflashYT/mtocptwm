@@ -1,20 +1,33 @@
-CC = gcc
-LD = gcc
-CFLAGS = -O3 -g -Isrc/include -std=gnu2x -flto
+CFLAGS = -Wall -Wextra -Wpedantic -O0 -g -Isrc/include -std=gnu2x -flto
 LDFLAGS = -flto
 
-compile = $(patsubst src/%.c,build/%.o,$(shell find src -name '*.c'))
-
+includes = $(shell find -O3 src/include)
 vpath %.c src
 vpath %.h src/include
 
-bin/mtocptwm: $(compile)
+compile = $(patsubst src/%.c,build/%.o,$(shell find -O3 src -name '*.c' | grep -v 'platform/'))
+default: linux
+include util/plat/linux.mk
+include util/plat/wii.mk
+include util/plat/windows.mk
+
+include util/strings.mk
+
+.PHONY: linux wii all_linux all_wii  clean
+
+# make a linux build if no platform is selected.
+
+
+bin/mtocptwm: $(compile) $(compile_plat)
 	@mkdir -p $(@D)
+	@$(info $s    LD $^ ==> $@)
+	@$(LD) $(LDFLAGS) $^ $(LIBS) -o $@
 
-	@$(info $s    LD $(compile) ==> $@)
-	@$(LD) $(LDFLAGS) $(compile) $(LIBS) -o $@
+bin/boot.dol: bin/mtocptwm
+	@$(info $sELFDOL $< ==> $@)
+	@elf2dol $< $@
 
-build/%.o: %.c
+build/%.o: %.c $(includes)
 	@mkdir -p $(@D)
 
 	@$(info $s    CC $< => $@)

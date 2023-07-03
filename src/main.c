@@ -6,37 +6,27 @@
 #include <time.h>
 
 extern void setupNet();
-extern void broadcastLoop(const char *name, const char *message, const bool mode);
-extern char localIP[17];
+extern void broadcastLoop(const char *message, const bool mode);
+extern void platformInit(int *argc, char *argv[]);
+#include <mtocptwm.h>
+
 int main(int argc, char *argv[]) {
+	platformInit(&argc, argv);
 	if (argc != 2) {puts("bad args"); return 1;}
 	setupNet();
 
 	char message[124];
-	char name[64];
-
-	gethostname(name, 64);
-
-	// POSIX standard says that if the name is truncated,
-	// it might not include a null terminator.
-	// Nobody sane would use a hostname > 64 characters,
-	// but just in case, add one.
-	name[63] = '\0';
 
 	// TODO: Listen for connections on a TCP port (find an open port, or if not possible, ask the firewall to let us through (MS firewall, or UPnP if router)), then put the IP and port here
-	sprintf(message, "__mtocptwm__/HELLO\nName: %s\nIP: %s\nPort: %s", name, localIP, "6969");
+	sprintf(message, "__mtocptwm__/HELLO\nName: %s\nPort: %d", netInfo.name, netInfo.localListenPort);
 
 
 	bool mode;
-	if (argv[1][0] == 'r') {
-		mode = true;
-	}
-	else if (argv[1][0] == 't') {
-		mode = false;
-	}
+	if (argv[1][0] == 'r') {mode = true;}
+	else if (argv[1][0] == 't') {mode = false;}
 	else {
 		puts("bad args");
 		exit(2);
 	}
-	broadcastLoop(name, message, mode);
+	broadcastLoop(message, mode);
 }
