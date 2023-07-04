@@ -7,25 +7,23 @@ vpath %.h src/include
 
 compile = $(patsubst src/%.c,build/%.o,$(shell find -O3 src -name '*.c' | grep -v 'platform/'))
 default: linux
+include util/strings.mk
+
 include util/plat/linux.mk
 include util/plat/wii.mk
 include util/plat/windows.mk
+include util/plat/switch.mk
 
-include util/strings.mk
 
-.PHONY: linux wii all_linux all_wii  clean
+.PHONY: linux wii all_linux all_wii windows win win64 win32 all_win32 all_win64 switch all_switch clean
 
 # make a linux build if no platform is selected.
 
 
-bin/mtocptwm: $(compile) $(compile_plat)
+bin/mtocptwm: $(compile_plat) $(compile)
 	@mkdir -p $(@D)
 	@$(info $s    LD $^ ==> $@)
 	@$(LD) $(LDFLAGS) $^ $(LIBS) -o $@
-
-bin/boot.dol: bin/mtocptwm
-	@$(info $sELFDOL $< ==> $@)
-	@elf2dol $< $@
 
 build/%.o: %.c $(includes)
 	@mkdir -p $(@D)

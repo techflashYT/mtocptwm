@@ -1,9 +1,9 @@
-#ifdef PLAT_LINUX
+#if PLAT_LINUX || __SWITCH__
 	#include <sys/socket.h>
 	#include <sys/ioctl.h>
 	#include <net/if.h>
-	#include <arpa/inet.h>
 	#include <unistd.h>
+	#include <arpa/inet.h>
 #endif
 
 #ifdef PLAT_WII
@@ -48,7 +48,7 @@ static void setupMulticastSocket() {
 	#ifdef PLAT_WII
 		net_socket(PF_INET, SOCK_DGRAM, IPPROTO_IP);
 	#endif
-	#if PLAT_LINUX || PLAT_WIN
+	#if PLAT_LINUX || PLAT_WIN || __SWITCH__
 		socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP);
 	#endif
 	if (netInfo.socket < 0) {

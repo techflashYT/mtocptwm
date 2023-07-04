@@ -11,6 +11,7 @@
 #include <network.h>
 #include <unistd.h>
 #include <mtocptwm.h>
+#include "../common/menu.c"
 static void *xfb;
 static GXRModeObj *rmode;
 void platformInit(int *argc, char *argv[]) {
@@ -53,14 +54,7 @@ void platformInit(int *argc, char *argv[]) {
 	*argc = 2;
 	int selected = 0;
 	int ret;
-
-	char * baseStr ="\x1b[2J\x1b[0;0HMain Menu\r\n"
-					"Please select a mode:\r\n"
-					"\r\n"
-					"  Transmit\r\n"
-					"  Recieve";
-	puts(baseStr);
-	puts("\x1b[3;0H>");
+	menuInit();
 	while (true) {
 		ret = scanWiimotes();
 		if (ret == 0x69) {
@@ -91,10 +85,7 @@ void platformInit(int *argc, char *argv[]) {
 				selected--;
 			}
 		}
-
-		puts(baseStr);
-		printf("\x1b[%d;0H>", 5 + selected);
-
+		menu(selected);
 		VIDEO_WaitVSync();
 	}
 	puts("\x1b[1;1H\x1b[2J");

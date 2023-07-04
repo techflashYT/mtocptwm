@@ -3,7 +3,7 @@
 #include <stdint.h>
 #include <stdlib.h>
 
-#ifdef PLAT_LINUX
+#if PLAT_LINUX || __SWITCH__
 	#include <sys/socket.h>
 	#include <arpa/inet.h>
 #endif
@@ -96,15 +96,15 @@ static void recieve() {
 		perror("bind");
 		exit(1);
 	}
-#ifdef PLAT_LINUX
-	struct ip_mreq mreq;
-	mreq.imr_multiaddr.s_addr = inet_addr(netInfo.multicastIP);
-	mreq.imr_interface.s_addr = htonl(INADDR_ANY);
-	if (setsockopt(netInfo.socket, IPPROTO_IP, IP_ADD_MEMBERSHIP, &mreq, sizeof(mreq)) < 0) {
-		perror("setsockopt mreq");
-		exit(1);
-	}
-#endif
+	#if PLAT_LINUX || __SWITCH__
+		struct ip_mreq mreq;
+		mreq.imr_multiaddr.s_addr = inet_addr(netInfo.multicastIP);
+		mreq.imr_interface.s_addr = htonl(INADDR_ANY);
+		if (setsockopt(netInfo.socket, IPPROTO_IP, IP_ADD_MEMBERSHIP, &mreq, sizeof(mreq)) < 0) {
+			perror("setsockopt mreq");
+			exit(1);
+		}
+	#endif
 	while (1) {
 		#ifdef PLAT_WII
 		scanWiimotes();
