@@ -16,6 +16,8 @@
         "platwii.h": "c",
         "bte.h": "c",
         "mtocptwm.h": "c",
-        "stdio.h": "c"
+        "stdio.h": "c",
+        "winsock2.h": "c",
+        "stdlib.h": "c"
     }
 }

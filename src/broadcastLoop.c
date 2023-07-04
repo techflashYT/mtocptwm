@@ -2,29 +2,35 @@
 #include <stdbool.h>
 #include <stdint.h>
 #include <stdlib.h>
-#include <string.h>
-#include <unistd.h>
-#include <errno.h>
 
 #ifdef PLAT_LINUX
-#include <sys/socket.h>
-#include <arpa/inet.h>
+	#include <sys/socket.h>
+	#include <arpa/inet.h>
 #endif
 
 #ifdef PLAT_WII
-#include <network.h>
-#include <platWii.h>
-#include <gccore.h>
-#define bind net_bind
-#define sendto net_sendto
-#define recvfrom net_recvfrom
+	#include <errno.h>
+	#include <network.h>
+	#include <platWii.h>
+	#include <gccore.h>
+	#define bind net_bind
+	#define sendto net_sendto
+	#define recvfrom net_recvfrom
 #endif
 
 #ifdef PLAT_WIN
+	#ifndef WIN32_LEAN_AND_MEAN
+	#define WIN32_LEAN_AND_MEAN
+	#endif
+	#include <winsock2.h>
+	#define sleep(sec) Sleep(sec * 1000)
+	extern int addrlen;
+#else // if anything but windows
+	#include <unistd.h>
+	#include <string.h>
+	extern uint32_t addrlen;
+#endif
 
-
-
-extern uint32_t addrlen;
 extern struct sockaddr_in addr;
 
 #include <mtocptwm.h>
@@ -56,8 +62,7 @@ static void transmit(const char *message) {
 		i++;
 		#ifdef PLAT_WII
 		int size = addr.sin_len;
-		#endif
-		#ifdef PLAT_LINUX
+		#else
 		int size = sizeof(addr);
 		#endif
 		int result = sendto(netInfo.socket, buf, 128, 0, (struct sockaddr *) &addr, size);
@@ -78,7 +83,7 @@ static void transmit(const char *message) {
 			}
 		}
 		#endif
-		#ifdef PLAT_LINUX
+		#if PLAT_LINUX || PLAT_WIN
 		sleep(5);
 		#endif
 	}

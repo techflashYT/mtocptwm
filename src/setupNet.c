@@ -1,27 +1,34 @@
 #ifdef PLAT_LINUX
-#include <sys/socket.h>
-#include <sys/ioctl.h>
-#include <net/if.h>
-#include <arpa/inet.h>
+	#include <sys/socket.h>
+	#include <sys/ioctl.h>
+	#include <net/if.h>
+	#include <arpa/inet.h>
+	#include <unistd.h>
 #endif
 
 #ifdef PLAT_WII
-#include <network.h>
+	#include <network.h>
+	#include <errno.h>
 #endif
 
 #ifdef PLAT_WIN
-#include <winsock2.h>
+	#ifndef WIN32_LEAN_AND_MEAN
+	#define WIN32_LEAN_AND_MEAN
+	#endif
+	#include <winsock2.h>
 #endif
 
-#include <unistd.h>
 #include <stdbool.h>
-#include <string.h>
 #include <stdlib.h>
+#include <string.h>
 #include <stdio.h>
-#include <errno.h>
-#include <stdint.h>
 struct sockaddr_in addr;
-uint32_t addrlen;
+#ifdef PLAT_WIN
+	int addrlen;
+#else
+	uint32_t addrlen;
+#endif
+
 
 #include <mtocptwm.h>
 
@@ -41,7 +48,7 @@ static void setupMulticastSocket() {
 	#ifdef PLAT_WII
 		net_socket(PF_INET, SOCK_DGRAM, IPPROTO_IP);
 	#endif
-	#if defined(PLAT_LINUX) || defined(PLAT_WIN)
+	#if PLAT_LINUX || PLAT_WIN
 		socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP);
 	#endif
 	if (netInfo.socket < 0) {
@@ -64,10 +71,10 @@ static void setupMulticastSocket() {
 }
 static void getHostname() {
 	#ifdef PLAT_WII
-	strcpy(netInfo.name, "Nintendo_Wii");
+		strcpy(netInfo.name, "Nintendo_Wii");
 	#endif
 
-	#ifdef PLAT_LINUX
+	#if PLAT_LINUX || PLAT_WIN
 	gethostname(netInfo.name, 64);
 
 	// POSIX standard says that if the name is truncated,

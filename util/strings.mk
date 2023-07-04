@@ -11,4 +11,5 @@ ___arch___=Unknown
 endif
 platStr_LinuxNative=Linux $(___arch___) ELF
 platStr_WiiBootDOL=Nintendo Wii boot.dol
-platStr_WinNative=Windows x86_64 `.exe' file
+platStr_Win64=Windows x86_64 `.exe' file
+platStr_Win32=Windows i386 `.exe' file
