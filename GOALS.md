@@ -1,0 +1,40 @@
+# Goals:
+
+- [x] is cross platform
+    - [x] Win32 & Win64
+    - [x] Linux
+    - [x] Nintendo Wii
+    - [ ] Nintendo Switch (**in progress now!**)
+    - [ ] macOS
+- [x] hosts a server on your LAN that lets you:
+  - [ ] seamlessly share 1 mouse cursor between all of your devices
+  - [ ] seamlessly connect your screens, you can open any window from any connected device, to any connected device, and everything would just appear as extra connected monitors, to make dragging windows between PCs easy
+- [x] broacasts info about the current setup to a multicast address so that the rest of the LAN can find it
+  - [x] name
+  - [x] IP address
+  - [ ] port number of server (NOTE: there is no acutal server yet to send the port number of)
+  - [ ] config
+- [ ] has a config file that can be shared in the discovery process
+  - [ ] stores the layout of the virtual monitors
+  - [ ] designed in a way that is easily expandable
+- [ ] creates virtual monitors to match the layout specified
+  - [ ] does so in the config
+  - [ ] works cross platform
+    - [ ] Windows
+    - [ ] Linux
+      - [ ] Xorg
+      - [ ] Wayland
+    - [ ] macOS
+    - [ ] Nintendo Wii
+    - [ ] Nintendo Switch
+- [ ] uses some method to grab any windows on the virtual monitors.  Must work cross platform
+- [ ] transfer any windows on the virtual monitors to the respective IP address and port
+  - [ ] IP & Port are from the loaded config
+  - [ ] uses an MPEGTS stream
+  - [ ] ONLY transfer the parts of the window that exist on the monitor, in such a way that if a window is split halfway between 2 monitors, it will only transfer what is necessary.
+- [ ] ability to autodetect the amount of availible bandwidth for each device seperately
+  - [ ] adjust the quality and FPS of the stream to each device accordingly
+    - [ ] this is designed in such a way that there is an acceptable balance between each for each machine
+- [ ] has a GUI for controlling which machine is in which position, and for adding new machines.
+  - [ ] the info is then be written to the config file
+    - [ ] config file will automatically update on all connected machines.
