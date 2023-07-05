@@ -27,4 +27,4 @@ bin/mtocptwm.nro: bin/mtocptwm
 	@elf2nro $< $@ $(NROFLAGS)
 
 run_switch:
-	./util/ftp_switch.sh $(IP) $(PORT)
+	nxlink -s bin/mtocptwm.nro

@@ -8,6 +8,10 @@
 	#include <arpa/inet.h>
 #endif
 
+#ifdef __SWITCH__
+#include <nswitch.h>
+#endif
+
 #ifdef PLAT_WII
 	#include <errno.h>
 	#include <network.h>
@@ -73,6 +77,7 @@ static void transmit(const char *message) {
 
 			perror("sendto err");
 			printf("return val: %d", result);
+			sleep(1);
 			exit(1);
 		}
 		#ifdef PLAT_WII
@@ -82,8 +87,7 @@ static void transmit(const char *message) {
 				VIDEO_WaitVSync();
 			}
 		}
-		#endif
-		#if PLAT_LINUX || PLAT_WIN
+		#else
 		sleep(5);
 		#endif
 	}
@@ -92,16 +96,28 @@ static void transmit(const char *message) {
 
 static void recieve() {
 	char buf[128];
-	if (bind(netInfo.socket, (struct sockaddr *) &addr, sizeof(addr)) < 0) {
+	int ret = bind(netInfo.socket, (struct sockaddr *) &addr, sizeof(addr));
+	if (ret < 0) {
+		#ifdef PLAT_WII
+		errno = ret;
+		#endif
 		perror("bind");
+		printf("\r\nreturn value: %d\r\n", ret);
+		sleep(1);
 		exit(1);
 	}
 	#if PLAT_LINUX || __SWITCH__
 		struct ip_mreq mreq;
 		mreq.imr_multiaddr.s_addr = inet_addr(netInfo.multicastIP);
 		mreq.imr_interface.s_addr = htonl(INADDR_ANY);
-		if (setsockopt(netInfo.socket, IPPROTO_IP, IP_ADD_MEMBERSHIP, &mreq, sizeof(mreq)) < 0) {
+		ret = setsockopt(netInfo.socket, IPPROTO_IP, IP_ADD_MEMBERSHIP, &mreq, sizeof(mreq));
+		if (ret < 0) {
+			#ifdef PLAT_WII
+			errno = ret;
+			#endif
 			perror("setsockopt mreq");
+			printf("\r\nreturn value: %d\r\n", ret);
+			sleep(1);
 			exit(1);
 		}
 	#endif
@@ -114,8 +130,10 @@ static void recieve() {
 			#ifdef PLAT_WII
 			errno = res;
 			#endif
-			
+
 			perror("recvfrom");
+			printf("\r\nreturn value: %d\r\n", ret);
+			sleep(1);
 			exit(1);
 		}
 		else if (res == 0) {

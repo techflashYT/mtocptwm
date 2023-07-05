@@ -6,6 +6,10 @@
 	#include <arpa/inet.h>
 #endif
 
+#ifdef __SWITCH__
+#include <nswitch.h>
+#endif
+
 #ifdef PLAT_WII
 	#include <network.h>
 	#include <errno.h>

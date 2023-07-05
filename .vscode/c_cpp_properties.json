@@ -60,7 +60,10 @@
                 "/opt/devkitpro/libnx/include/"
             ],
             "defines": [
-                "__SWITCH__"
+                "__SWITCH__",
+                "bool=_Bool",
+                "true=1",
+                "false=0"
             ],
             "compilerPath": "/opt/devkitpro/devkitA64/bin/aarch64-none-elf-gcc",
             "cStandard": "gnu23",

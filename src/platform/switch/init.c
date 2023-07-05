@@ -6,8 +6,10 @@
 #include "../common/menu.c"
 extern int shouldExit;
 void platformInit(int *argc, char *argv[]) {
+	socketInitializeDefault();
+	nxlinkStdio();
 	// initialize the text console
-	consoleInit(NULL);
+	// consoleInit(NULL);
 
 	// set supported input layout: 1 player, standard 2-stick controls (dual joycon, pro controller, usb)
 	padConfigureInput(1, HidNpadStyleSet_NpadStandard);
