@@ -3,10 +3,20 @@
 - [x] is cross platform
     - [x] Win32 & Win64
     - [x] Linux
-    - [x] Nintendo Wii
-    - [ ] Nintendo Switch (**in progress now!**)
+    - [ ] Nintendo Wii
+        - [x] Platform specific functions
+        - [x] Initializes properly
+        - [x] Menu for setting up the command line
+        - [x] Sending packets
+        - [ ] Recieving Packets (**NOTE**: Missing `ip_mreq` struct, might be impossible.)
+    - [ ] Nintendo Switch
+        - [x] Platform specific functions
+        - [x] Initializes properly
+        - [x] Menu for setting up the command line
+        - [x] Sending packets
+        - [ ] Recieving Packets (**NOTE**: Gives `Not owner` error, aka permission denied.  Might not be possible with current homebrew loading methods.)
     - [ ] macOS
-- [x] hosts a server on your LAN that lets you:
+- [ ] hosts a server on your local IP address that lets you:
   - [ ] seamlessly share 1 mouse cursor between all of your devices
   - [ ] seamlessly connect your screens, you can open any window from any connected device, to any connected device, and everything would just appear as extra connected monitors, to make dragging windows between PCs easy
 - [x] broacasts info about the current setup to a multicast address so that the rest of the LAN can find it
