@@ -3,6 +3,10 @@
 #pragma GCC diagnostic ignored "-Wpedantic"
 #include <switch.h>
 #pragma GCC diagnostic pop
+
+extern PadState pad;
+extern ViDisplay display;
+extern Event vsyncEvent;
 /*
 #define puts(x) \
 	puts(x);\
@@ -17,14 +21,3 @@
 	consoleUpdate(NULL);
 */
 
-#define puts(x) \
-	puts(x);\
-	fflush(stdout);
-
-#define perror(x) \
-	perror(x); \
-	fflush(stdout);
-
-#define printf(...) \
-	printf(__VA_ARGS__); \
-	fflush(stdout);

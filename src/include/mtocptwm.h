@@ -1,4 +1,5 @@
 #include <stdint.h>
+#include <stdbool.h>
 
 typedef struct {
     char *multicastIP;
@@ -13,3 +14,5 @@ typedef struct {
 } netInfo_t;
 
 extern netInfo_t netInfo;
+void __attribute__ ((noreturn)) platformExit(bool err);
+void platformTxLoop();

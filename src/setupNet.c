@@ -51,8 +51,7 @@ static void setupMulticastSocket() {
 	netInfo.socket = 
 	#ifdef PLAT_WII
 		net_socket(PF_INET, SOCK_DGRAM, IPPROTO_IP);
-	#endif
-	#if PLAT_LINUX || PLAT_WIN || __SWITCH__
+	#else
 		socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP);
 	#endif
 	if (netInfo.socket < 0) {
@@ -62,7 +61,7 @@ static void setupMulticastSocket() {
 			
 		perror("socket err");
 		printf("returned: %d", netInfo.socket);
-		exit(1);
+		platformExit(true);
 	}
 	memset((char *)&addr, 0, sizeof(addr));
 	addr.sin_family = AF_INET;
@@ -76,15 +75,13 @@ static void setupMulticastSocket() {
 static void getHostname() {
 	#ifdef PLAT_WII
 		strcpy(netInfo.name, "Nintendo_Wii");
-	#endif
+	#else
+		gethostname(netInfo.name, 64);
 
-	#if PLAT_LINUX || PLAT_WIN
-	gethostname(netInfo.name, 64);
-
-	// POSIX standard says that if the name is truncated,
-	// it might not include a null terminator.
-	// Nobody sane would use a hostname > 64 characters,
-	// but just in case, add one.
-	netInfo.name[63] = '\0';
+		// POSIX standard says that if the name is truncated,
+		// it might not include a null terminator.
+		// Nobody sane would use a hostname > 64 characters,
+		// but just in case, add one.
+		netInfo.name[63] = '\0';
 	#endif
 }

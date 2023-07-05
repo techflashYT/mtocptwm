@@ -22,8 +22,7 @@ int main(int argc, char *argv[]) {
 	else {badArgs = true;}
 	if (badArgs) {
 		puts("Please give argument `r` or `t` for recieve or transmit.");
-		sleep(100);
-		return 1;
+		platformExit(true);
 	}
 	#if __SWITCH__
 		// it seems like if we don't call this every once in a while, everything just dies
@@ -40,4 +39,5 @@ int main(int argc, char *argv[]) {
 	sprintf(message, "__mtocptwm__/HELLO\nName: %s\nPort: %d", netInfo.name, netInfo.localListenPort);
 
 	broadcastLoop(message, mode);
+	platformExit(false);
 }

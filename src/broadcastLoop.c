@@ -74,22 +74,12 @@ static void transmit(const char *message) {
 			#ifdef PLAT_WII
 			errno = result;
 			#endif
-
 			perror("sendto err");
-			printf("return val: %d", result);
-			sleep(1);
-			exit(1);
+			printf("\r\nreturn value: %d\r\n", result);
+
+			platformExit(true);
 		}
-		#ifdef PLAT_WII
-		for (uint_fast8_t i = 0; i != 5; i++) {
-			for (uint_fast8_t i2 = 0; i2 != 59; i2++) {
-				scanWiimotes();
-				VIDEO_WaitVSync();
-			}
-		}
-		#else
-		sleep(5);
-		#endif
+		platformTxLoop();
 	}
 }
 
@@ -103,8 +93,8 @@ static void recieve() {
 		#endif
 		perror("bind");
 		printf("\r\nreturn value: %d\r\n", ret);
-		sleep(1);
-		exit(1);
+
+		platformExit(true);
 	}
 	#if PLAT_LINUX || __SWITCH__
 		struct ip_mreq mreq;
@@ -117,8 +107,8 @@ static void recieve() {
 			#endif
 			perror("setsockopt mreq");
 			printf("\r\nreturn value: %d\r\n", ret);
-			sleep(1);
-			exit(1);
+			
+			platformExit(true);
 		}
 	#endif
 	while (1) {
@@ -133,8 +123,8 @@ static void recieve() {
 
 			perror("recvfrom");
 			printf("\r\nreturn value: %d\r\n", ret);
-			sleep(1);
-			exit(1);
+
+			platformExit(true);
 		}
 		else if (res == 0) {
 			break;
