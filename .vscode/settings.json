@@ -20,6 +20,7 @@
         "winsock2.h": "c",
         "stdlib.h": "c",
         "inet.h": "c",
-        "nswitch.h": "c"
+        "nswitch.h": "c",
+        "errno.h": "c"
     }
 }

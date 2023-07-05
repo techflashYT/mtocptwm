@@ -10,11 +10,11 @@ void __attribute__ ((noreturn)) platformExit(bool err) {
 	shutdown(netInfo.socket, SHUT_RDWR);
 	close(netInfo.socket);
 
-	consoleExit(NULL);
 	socketExit();
 
 	if (err) {
 		sleep(2);
 	}
+	consoleExit(NULL);
 	exit(err);
 }

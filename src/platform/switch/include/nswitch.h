@@ -4,9 +4,12 @@
 #include <switch.h>
 #pragma GCC diagnostic pop
 
+#include <errno.h>
+#define perror(x) printf(x ": %s\r\n", strerror(errno))
+
 extern PadState pad;
-extern ViDisplay display;
-extern Event vsyncEvent;
+
+
 /*
 #define puts(x) \
 	puts(x);\

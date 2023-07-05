@@ -27,4 +27,4 @@ bin/mtocptwm.nro: bin/mtocptwm
 	@elf2nro $< $@ $(NROFLAGS)
 
 run_switch:
-	nxlink -s bin/mtocptwm.nro
+	nxlink bin/mtocptwm.nro

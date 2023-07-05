@@ -91,6 +91,7 @@ static void recieve() {
 		#ifdef PLAT_WII
 		errno = ret;
 		#endif
+		puts("ccc");
 		perror("bind");
 		printf("\r\nreturn value: %d\r\n", ret);
 
@@ -120,7 +121,7 @@ static void recieve() {
 			#ifdef PLAT_WII
 			errno = res;
 			#endif
-
+			puts("aaa");
 			perror("recvfrom");
 			printf("\r\nreturn value: %d\r\n", ret);
 
@@ -131,5 +132,8 @@ static void recieve() {
 		}
 		int pktNum = *((uint32_t *)&buf[0]);
 		printf("%s: message #%d = \"%s\"\n", inet_ntoa(addr.sin_addr), pktNum, &buf[4]);
+		#if __SWITCH__
+		consoleUpdate(NULL);
+		#endif
 	}
 }

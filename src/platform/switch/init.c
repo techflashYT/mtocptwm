@@ -3,8 +3,6 @@
 #include "../common/menu.c"
 extern int shouldExit;
 PadState pad;
-ViDisplay display;
-Event vsyncEvent;
 void platformInit(int *argc, char *argv[]) {
 	socketInitializeDefault();
 	// nxlinkStdio();
@@ -17,30 +15,16 @@ void platformInit(int *argc, char *argv[]) {
 	// init default gamepad (read handheld mode input, as well as first controller)
 	padInitializeDefault(&pad);
 
-	uint64_t buttons = 0;
-	uint64_t buttonsOld = 1;
+	uint64_t buttons;
 	uint_fast8_t selected = 0;
 	*argc = 2;
 	menuInit();
 
-	// setup to be able to wait for vsync
-	Result rc = viOpenDefaultDisplay(&display);
-	if (rc != 0) {
-		uint16_t rc16[2] = &rc;
-		printf("viOpenDefaultDisplay(): Error %d-%d", rc16[0], rc16[1]);
-		exit(1);
-	}
-
 	while (appletMainLoop()) {
-		
-		// scan gamepade
+		// scan gamepad
 		padUpdate(&pad);
 
 		buttons = padGetButtons(&pad);
-		if (buttons == buttonsOld) {
-			continue;
-		}
-		buttonsOld = buttons;
 		if (buttons & HidNpadButton_Plus) {
 			consoleExit(NULL);
 			exit(1);
