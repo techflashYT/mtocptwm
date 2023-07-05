@@ -11,7 +11,7 @@ include util/strings.mk
 include util/plat/*.mk
 
 
-.PHONY: linux wii all_linux all_wii windows win win64 win32 all_win32 all_win64 switch all_switch clean
+.PHONY: linux wii all_linux all_wii windows win win64 win32 all_win32 all_win64 switch all_switch run_switch run_wii clean
 
 # make a linux build if no platform is selected.
 

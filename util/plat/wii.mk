@@ -21,3 +21,5 @@ all_wii: bin/boot.dol
 bin/boot.dol: bin/mtocptwm
 	@$(info $sELFDOL $< ==> $@)
 	@elf2dol $< $@
+run_wii: bin/boot.dol
+	@wiiload bin/boot.dol
