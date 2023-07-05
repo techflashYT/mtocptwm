@@ -85,6 +85,12 @@ static void transmit(const char *message) {
 
 
 static void recieve() {
+	#if __SWITCH__
+	puts("This option is broken on Switch!!!\r\nIt simply will not work correctly.");
+	consoleUpdate(NULL);
+	sleep(2);
+	platformExit(true);
+	#endif
 	char buf[128];
 	int ret = bind(netInfo.socket, (struct sockaddr *) &addr, sizeof(addr));
 	if (ret < 0) {

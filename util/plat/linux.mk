@@ -7,7 +7,7 @@ endif
 
 linux:
 	@$(info Building for platform: $(platStr_LinuxNative))
-	@$(MAKE) $(MAKEFLAGS) all_linux PLAT_LINUX=1 --quiet
+	@$(MAKE) --quiet $(MAKEFLAGS) all_linux PLAT_LINUX=1
 
 
 all_linux: bin/mtocptwm

@@ -5,14 +5,10 @@ includes = $(shell find -O3 src/include)
 vpath %.c src
 vpath %.h src/include
 
-compile = $(patsubst src/%.c,build/%.o,$(shell find -O3 src -name '*.c' | grep -v 'platform/'))
+compile=$(patsubst src/%.c,build/%.o,$(shell find -O3 src -name '*.c' | grep -v 'platform/'))
 default: linux
 include util/strings.mk
-
-include util/plat/linux.mk
-include util/plat/wii.mk
-include util/plat/windows.mk
-include util/plat/switch.mk
+include util/plat/*.mk
 
 
 .PHONY: linux wii all_linux all_wii windows win win64 win32 all_win32 all_win64 switch all_switch clean

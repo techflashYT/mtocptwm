@@ -11,7 +11,7 @@ endif
 
 switch:
 	@$(info Building for platform: $(platStr_SwitchNRO))
-	@$(MAKE) $(MAKEFLAGS) all_switch PLAT_NSWITCH=1 --quiet
+	@$(MAKE) --quiet $(MAKEFLAGS) all_switch PLAT_NSWITCH=1
 
 
 all_switch: bin/mtocptwm.nro
