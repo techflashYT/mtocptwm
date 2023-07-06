@@ -2,6 +2,7 @@
 #include <unistd.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <signal.h>
 
 extern int guiMain();
 extern bool mode;
@@ -19,6 +20,7 @@ void handleArgs(int argc, char *argv[]) {
 	}
 	// no args, handle GUI stuff
 	if (argc == 1) {
+		pid_t parent = getpid();
 		pid_t pid = fork();
 		if (pid == -1) {
 			// error
@@ -26,14 +28,14 @@ void handleArgs(int argc, char *argv[]) {
 			exit(1);
 		}
 		if (pid == 0) {
-			guiMain();
-			return;
-		}
-		if (pid == 1) {
 			// TODO: parent process, find some way to communicate with the child, then wait for the child (SDL) to tell us the mode.  Some ideas, ranked in order of how good they are:
 			// - redirect stdout to the child's stdin (would require minimal changes, like opening a pipe, then redirecting our stdout to the pipe's input, and redirecting our stdin to the pipe's output)
 			// - IPC
 			// - temporary files
+		}
+		if (pid >= 1) {
+			guiMain();
+			exit(0);
 		}
 	}
 }

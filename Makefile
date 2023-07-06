@@ -1,5 +1,5 @@
-CFLAGS = -Wall -Wextra -Wpedantic -O0 -g -Isrc/include -std=gnu2x -flto
-LDFLAGS = -flto -g
+CFLAGS = -Wall -Wextra -Wpedantic -O0 -g -Isrc/include -std=gnu2x -flto -fsanitize=address,undefined -g
+LDFLAGS = -flto -g 
 
 includes = $(shell find -O3 src/include)
 vpath %.c src
@@ -15,7 +15,7 @@ include util/plat/*.mk
 
 # make a linux build if no platform is selected.
 
-LIBS+=-lSDL2 -lGL
+LIBS+= -lasan -lubsan -lSDL2 -lGL 
 
 bin/mtocptwm: $(compile_plat) $(compile)
 	@mkdir -p $(@D)
