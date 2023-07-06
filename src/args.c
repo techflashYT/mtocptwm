@@ -34,7 +34,7 @@ void ARG_Init(int argc, char *argv[]) {
 			while (true) { sleep(5); }
 		}
 		if (pid >= 1) {
-			// start GUI here
+			GUI_Main();
 			exit(0);
 		}
 	}
