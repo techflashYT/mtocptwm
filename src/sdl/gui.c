@@ -1,40 +1,34 @@
-#include <SDL2/SDL.h>
-#include <SDL2/SDL_ttf.h>
 #include <stdbool.h>
 #include <stdio.h>
+#include "font.h"
 #include "button.h"
+#include "vars.h"
 #include <data.h>
-TTF_Font *font;
-SDL_RWops*fontRWOps;
+SDL_Window *win;
+SDL_Surface *winSurface;
+SDL_Renderer *rend;
+extern SDL_RWops *sansFontRWOps;
 int GUI_Main() {
 	puts("initializing GUI");
 	// returns zero on success else non-zero
 	if (SDL_Init(SDL_INIT_EVERYTHING) != 0) {
 		printf("error initializing SDL: %s\n", SDL_GetError());
-		return 1;
+		exit(1);
 	}
-	if (TTF_Init() != 0) {
-		printf("error initializing SDL-TTF: %s", TTF_GetError());
-		return 1;
-	}
-	SDL_Window *win = SDL_CreateWindow("MTOCPTWM", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 500, 500, 0);
+	win = SDL_CreateWindow("MTOCPTWM", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 500, 500, 0);
 
-	fontRWOps = SDL_RWFromConstMem(DATA_FontSans, DATA_FontSans_Size);
-	if (fontRWOps == NULL) {
-		printf("error creating SDL RWops from mem: %s", SDL_GetError());
-		return 1;
-	}
-	font = TTF_OpenFontRW(fontRWOps, false, 12);
-	if (font == NULL) {
-		printf("error creating SDL-TTF Font from RWops: %s", SDL_GetError());
-		return 1;
-	}
+	FONT_Init();
 	// triggers the program that controls
 	// your graphics hardware and sets flags
 	uint32_t renderFlags = SDL_RENDERER_ACCELERATED;
  
 	// creates a renderer to render our images
-	SDL_Renderer* rend = SDL_CreateRenderer(win, -1, renderFlags);
+	rend = SDL_CreateRenderer(win, -1, renderFlags);
+
+	if (rend == NULL) {
+		printf("error initializing SDL renderer: %s", SDL_GetError());
+		exit(1);
+	}
  
 	// controls animation loop
 	bool close = false;
@@ -61,7 +55,7 @@ int GUI_Main() {
 			}
 
 			// pass event to button
-			button_process_event(&startButton, &event);
+			BUTTON_ProceessEvent(&startButton, &event);
 		}
 		SDL_SetRenderDrawColor(rend, 69, 69, 69, 255);
 
@@ -80,13 +74,31 @@ int GUI_Main() {
 		// calculates to 60 fps
 		SDL_Delay(1000 / 60);
 	}
- 
+
 	// destroy renderer
 	SDL_DestroyRenderer(rend);
  
+	// destroy surface
+	int ret = SDL_DestroyWindowSurface(win);
+	if (ret != 0) {
+		printf("error destroying SDL Window Surface: %s", SDL_GetError());
+	}
+
 	// destroy window
 	SDL_DestroyWindow(win);
-	 
+	
+	// close font
+	TTF_CloseFont(sansFont);
+
+	// close rwops for font
+	ret = SDL_RWclose(sansFontRWOps);
+	if (ret != 0) {
+		printf("error closing SDL RWops: %s", SDL_GetError());
+	}
+
+	// close SDL_TTF
+	TTF_Quit();
+
 	// close SDL
 	SDL_Quit();
  
