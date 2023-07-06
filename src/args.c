@@ -2,6 +2,8 @@
 #include <unistd.h>
 #include <stdio.h>
 #include <stdlib.h>
+
+extern int guiMain();
 extern bool mode;
 void handleArgs(int argc, char *argv[]) {
 	bool badArgs = false;
@@ -24,7 +26,7 @@ void handleArgs(int argc, char *argv[]) {
 			exit(1);
 		}
 		if (pid == 0) {
-			// TODO: child process, initialize SDL and whatever.  Currently just returns to avoid breaking everything.
+			guiMain();
 			return;
 		}
 		if (pid == 1) {
