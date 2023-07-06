@@ -20,7 +20,6 @@ void ARG_Init(int argc, char *argv[]) {
 	}
 	// no args, handle GUI stuff
 	if (argc == 1) {
-		pid_t parent = getpid();
 		pid_t pid = fork();
 		if (pid == -1) {
 			// error
