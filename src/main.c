@@ -16,7 +16,6 @@ bool mode;
 
 int main(int argc, char *argv[]) {
 	PLAT_Init(&argc, argv);
-	NET_Init();
 	ARG_Init(argc, argv);
 	NET_Init();
 
