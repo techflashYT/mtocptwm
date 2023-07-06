@@ -15,9 +15,6 @@ mtocptwm running on an AArch64 Linux Chromebook
 mtocptwm running on an i386 Windows XP desktop  
 ![mtocptwm running on an i386 Windows XP desktop](img/winxp_i386.png)
 
-mtocptwm running on a PowerPC Nintendo Wii  
-![mtocptwm running on a PowerPC Nintendo Wii](img/wii.png)
-
 mtocptwm running on an AArch64 Nintendo Switch  
 ![mtocptwm running on an AArch64 Nintendo Switch](img/nswitch.png)
 

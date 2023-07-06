@@ -6,12 +6,12 @@ CFLAGS+=-D__SWITCH__ -Isrc/platform/switch/include -ffunction-sections $(ARCH) $
 LD=$(CC)
 ASFLAGS+=-g $(ARCH)
 LDFLAGS+=-specs=$(DEVKITPRO)/libnx/switch.specs -g $(ARCH) -static
-LIBS+=-L$(PORTLIBS)/lib -L$(LIBNX)/lib -lEGL -lglapi -ldrm_nouveaud -lnxd -lpthread -lstdc++ -lm -lfreetype -lbz2 -lz -lpng -lGLESv2
+LIBS+=-L$(PORTLIBS)/lib -L$(LIBNX)/lib -lEGL -lglapi -ldrm_nouveau -lnx -lpthread -lstdc++ -lm -lfreetype -lbz2 -lz -lpng -lGLESv2
 endif
 
 switch:
 	@$(info Building for platform: $(platStr_SwitchNRO))
-	@$(MAKE) all_switch PLAT_NSWITCH=1
+	@$(MAKE) --quiet all_switch PLAT_NSWITCH=1
 
 
 all_switch: bin/mtocptwm.nro

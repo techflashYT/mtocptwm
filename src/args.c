@@ -26,7 +26,7 @@ void ARG_Init(int argc, char *argv[]) {
 	if (argc == 1) {
 		#ifdef __SWITCH__
 			Thread t;
-			Result res = threadCreate(&t, (ThreadFunc)GUI_Main, NULL, NULL, 10240, 0x3B, 2);
+			Result res = threadCreate(&t, (ThreadFunc)GUI_Main, NULL, NULL, 1048576, 0x3B, 2);
 			if (res != 0) {
 				fatalThrow(res);
 			}

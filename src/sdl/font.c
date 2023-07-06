@@ -7,7 +7,7 @@ TTF_Font *sansFont_16;
 SDL_RWops*sansFontRWOps;
 void FONT_Init() {
 	int ret = TTF_Init();
-    if (ret != 0) {
+	if (ret != 0) {
 		printf("error initializing SDL-TTF: %s\r\n", TTF_GetError());
 		exit(1);
 	}
@@ -33,11 +33,11 @@ void FONT_Init() {
 	return;
 }
 SDL_Texture *FONT_Draw(char text[], TTF_Font *font, SDL_Color fg, SDL_Color bg, enum FONT_RendStyle renderStyle) {
-    SDL_Surface *surf;
+	SDL_Surface *surf;
 
-    if      (renderStyle == FONT_RendStyle_Solid)   surf = TTF_RenderText_Solid  (font, text, fg);
-    else if (renderStyle == FONT_RendStyle_Shaded)  surf = TTF_RenderText_Shaded (font, text, fg, bg);
-    else if (renderStyle == FONT_RendStyle_Blended) surf = TTF_RenderText_Blended(font, text, fg);
+	if      (renderStyle == FONT_RendStyle_Solid)   surf = TTF_RenderText_Solid  (font, text, fg);
+	else if (renderStyle == FONT_RendStyle_Shaded)  surf = TTF_RenderText_Shaded (font, text, fg, bg);
+	else if (renderStyle == FONT_RendStyle_Blended) surf = TTF_RenderText_Blended(font, text, fg);
 
 	if (surf == NULL) {
 		printf("failed to render SDL text to surface: %s\r\n", SDL_GetError());
@@ -50,5 +50,5 @@ SDL_Texture *FONT_Draw(char text[], TTF_Font *font, SDL_Color fg, SDL_Color bg, 
 		exit(1);
 	}
 	SDL_FreeSurface(surf);
-    return texture;
+	return texture;
 }

@@ -5,8 +5,8 @@
 #include "vars.h"
 #include <data.h>
 #include <SDL2/SDL_log.h>
+#include <GL/gl.h>
 SDL_Window *win;
-SDL_Surface *winSurface;
 SDL_Renderer *rend;
 extern SDL_RWops *sansFontRWOps;
 void GUI_Main() {
@@ -23,10 +23,10 @@ void GUI_Main() {
 	char *title = "sdl2_gles2";
 	int winXpos = 0;
 	int winYpos = 0;
-	int winWidth = 1920;
-	int winHeight = 1080;
+	int winWidth = 640;
+	int winHeight = 480;
 	#else
-	char *title = "sdl2_gles2";
+	char *title = "MTOCPTWM";
 	int winXpos = SDL_WINDOWPOS_CENTERED;
 	int winYpos = SDL_WINDOWPOS_CENTERED;
 	int winWidth = 640;
@@ -34,7 +34,6 @@ void GUI_Main() {
 	#endif
 
 	win = SDL_CreateWindow(title, winXpos, winYpos, winWidth, winHeight, 0);
-
 	if (win == NULL) {
 		printf("error creating SDL Window: %s\r\n", SDL_GetError());
 		exit(1);
@@ -49,8 +48,7 @@ void GUI_Main() {
 	#else
 	int renderIndex = -1;
 	#endif
-	// uint32_t renderFlags = SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC;
-	uint32_t renderFlags = 0;
+	uint32_t renderFlags = SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC;
 	// triggers the program that controls
 	// your graphics hardware and sets flags
  
