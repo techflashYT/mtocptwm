@@ -1,7 +1,9 @@
 #include <SDL2/SDL.h>
+#include <SDL2/
 #include <stdbool.h>
 #include <stdio.h>
-
+#include "button.h"
+TTF_Font *Sans = TTF_OpenFont
 int guiMain() {
 	// returns zero on success else non-zero
 	if (SDL_Init(SDL_INIT_EVERYTHING) != 0) {
@@ -11,7 +13,7 @@ int guiMain() {
 
 	// triggers the program that controls
 	// your graphics hardware and sets flags
-	Uint32 render_flags = SDL_RENDERER_ACCELERATED;
+	uint32_t render_flags = SDL_RENDERER_ACCELERATED;
  
 	// creates a renderer to render our images
 	SDL_Renderer* rend = SDL_CreateRenderer(win, -1, render_flags);
@@ -19,6 +21,14 @@ int guiMain() {
 	// controls animation loop
 	bool close = false;
  
+	button_t startButton = {
+		.color = { .r = 255, .g = 255, .b = 255, .a = 255, },
+		.drawRect = { .x = 128, .y = 128, .w = 128, .h = 128 },
+		.text = "bottom text"
+	};
+
+
+
 	// animation loop
 	while (!close) {
 		SDL_Event event;
@@ -26,19 +36,25 @@ int guiMain() {
 		// Events management
 		while (SDL_PollEvent(&event)) {
 			switch (event.type) {
- 
-			case SDL_QUIT:
-				// handling of close button
-				close = 1;
-				break;
+				case SDL_QUIT:
+					// handling of close button
+					close = 1;
+					break;
 			}
+
+			// pass event to button
+			button_process_event(&startButton, &event);
 		}
- 
+		SDL_SetRenderDrawColor(rend, 69, 69, 69, 255);
+
 		// clears the screen
 		SDL_RenderClear(rend);
 
-		SDL_SetRenderDrawColor(rend, 69, 69, 69, 255);
- 
+
+		if (button(rend, &startButton)) {
+			puts("button click");
+		}
+
 		// triggers the double buffers
 		// for multiple rendering
 		SDL_RenderPresent(rend);
