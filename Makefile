@@ -1,4 +1,5 @@
-CFLAGS = -Wall -Wextra -Wpedantic -O0 -g -Isrc/include -std=gnu2x -flto -fsanitize=address,undefined -g
+ORIGCFLAGS = -Wall -Wextra -Wpedantic -O0 -g -Isrc/include -std=gnu2x -flto -g
+CFLAGS=$(ORIGCFLAGS)
 LDFLAGS = -flto -g 
 
 includes = $(shell find -O3 src/include)
@@ -18,7 +19,10 @@ include util/plat/*.mk
 
 # make a linux build if no platform is selected.
 
-LIBS+=-lasan -lubsan -lSDL2 -lSDL2_ttf -lGL
+LIBS+=-lSDL2 -lSDL2_ttf
+ifeq ($(strip $(PLAT_NSWITCH)),)
+LIBS+=-lGL
+endif
 
 build/font/%.o: build/font/%.c
 	@mkdir -p $(@D)
@@ -40,19 +44,20 @@ build/font/FreeMono.c: misc/freefont-20120503/FreeMono.ttf util/bin2c
 util/bin2c: util/bin2c.c
 	@mkdir -p $(@D)
 
-	@$(info $s    CC $< => $@)
-	@$(CC) $(CFLAGS) $< -o $@
+	@$(info $sHOSTCC $< => $@)
+# uses system gcc
+	@gcc $(ORIGCFLAGS) $< -o $@
 
 bin/mtocptwm: $(compile_plat) $(compile) $(fonts)
 	@mkdir -p $(@D)
-	@$(info $s    LD $^ ==> $@)
-	@$(LD) $(LDFLAGS) $^ $(LIBS) -o $@
+#	@$(info $s    LD $^ ==> $@)
+	$(LD) $(LDFLAGS) $^ $(LIBS) -o $@
 
 build/%.o: %.c $(includes)
 	@mkdir -p $(@D)
 
-	@$(info $s    CC $< => $@)
-	@$(CC) $(CFLAGS) -c $< -o $@
+#	@$(info $s    CC $< => $@)
+	$(CC) $(CFLAGS) -c $< -o $@
 
 clean:
 	@rm -rf build bin util/bin2c

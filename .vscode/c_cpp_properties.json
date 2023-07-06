@@ -23,6 +23,7 @@
                 "${workspaceFolder}/src/platform/wii/include",
                 "/opt/devkitpro/devkitPPC/powerpc-eabi/include/",
                 "/opt/devkitpro/libogc/include",
+                "/opt/devkitpro/portlibs/wii/include",
                 "/opt/devkitpro/devkitPPC/powerpc-eabi/include/c++/13.1.0",
                 "/opt/devkitpro/devkitPPC/powerpc-eabi/include/c++/13.1.0/powerpc-eabi"
             ],
@@ -57,7 +58,8 @@
             "includePath": [
                 "${workspaceFolder}/src/include",
                 "${workspaceFolder}/src/platform/switch/include",
-                "/opt/devkitpro/libnx/include/"
+                "/opt/devkitpro/libnx/include/",
+                "/opt/devkitpro/portlibs/switch/include/"
             ],
             "defines": [
                 "__SWITCH__",

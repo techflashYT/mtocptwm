@@ -4,31 +4,66 @@
 #include "button.h"
 #include "vars.h"
 #include <data.h>
+#include <SDL2/SDL_log.h>
 SDL_Window *win;
 SDL_Surface *winSurface;
 SDL_Renderer *rend;
 extern SDL_RWops *sansFontRWOps;
-int GUI_Main() {
+void GUI_Main() {
 	puts("initializing GUI");
 	// returns zero on success else non-zero
-	if (SDL_Init(SDL_INIT_EVERYTHING) != 0) {
-		printf("error initializing SDL: %s\n", SDL_GetError());
+	int ret = SDL_Init(SDL_INIT_VIDEO | SDL_INIT_JOYSTICK);
+	if (ret != 0) {
+		printf("error initializing SDL: %s\r\n", SDL_GetError());
 		exit(1);
 	}
-	win = SDL_CreateWindow("MTOCPTWM", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 640, 480, 0);
+	printf("SDL_Init(): %d\r\n", ret);
+
+	#if __SWITCH__
+	char *title = "sdl2_gles2";
+	int winXpos = 0;
+	int winYpos = 0;
+	int winWidth = 1920;
+	int winHeight = 1080;
+	#else
+	char *title = "sdl2_gles2";
+	int winXpos = SDL_WINDOWPOS_CENTERED;
+	int winYpos = SDL_WINDOWPOS_CENTERED;
+	int winWidth = 640;
+	int winHeight = 480;
+	#endif
+
+	win = SDL_CreateWindow(title, winXpos, winYpos, winWidth, winHeight, 0);
+
+	if (win == NULL) {
+		printf("error creating SDL Window: %s\r\n", SDL_GetError());
+		exit(1);
+	}
+	printf("SDL_CreateWindow(): %p\r\n", (void *)win);
 
 	FONT_Init();
+	puts("returned from FONT_Init()");
+
+	#if __SWITCH__
+	int renderIndex = 0;
+	#else
+	int renderIndex = -1;
+	#endif
+	// uint32_t renderFlags = SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC;
+	uint32_t renderFlags = 0;
 	// triggers the program that controls
 	// your graphics hardware and sets flags
-	uint32_t renderFlags = SDL_RENDERER_ACCELERATED;
  
 	// creates a renderer to render our images
-	rend = SDL_CreateRenderer(win, -1, renderFlags);
+	puts("creating SDL renderer");
+	rend = SDL_CreateRenderer(win, renderIndex, renderFlags);
+	puts("done");
 
 	if (rend == NULL) {
-		printf("error initializing SDL renderer: %s", SDL_GetError());
+		printf("error initializing SDL renderer: %s\r\n", SDL_GetError());
 		exit(1);
 	}
+	printf("SDL_CreateRenderer(): %p\r\n", (void *)rend);
  
 	// controls animation loop
 	bool close = false;
@@ -74,16 +109,10 @@ int GUI_Main() {
 		// calculates to 60 fps
 		SDL_Delay(1000 / 60);
 	}
-
+	puts("cleaning up SDL thread and exiting.");
 	// destroy renderer
 	SDL_DestroyRenderer(rend);
  
-	// destroy surface
-	int ret = SDL_DestroyWindowSurface(win);
-	if (ret != 0) {
-		printf("error destroying SDL Window Surface: %s", SDL_GetError());
-	}
-
 	// destroy window
 	SDL_DestroyWindow(win);
 	
@@ -103,6 +132,6 @@ int GUI_Main() {
 
 	// close SDL
 	SDL_Quit();
- 
-	return 0;
+
+	return;
 }

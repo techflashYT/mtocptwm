@@ -25,6 +25,7 @@
         "sdl.h": "c",
         "sdl_ttf.h": "c",
         "font.h": "c",
-        "button.h": "c"
+        "button.h": "c",
+        "sdl_log.h": "c"
     }
 }

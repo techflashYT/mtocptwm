@@ -13,7 +13,7 @@ endif
 
 wii:
 	@$(info Building for platform: $(platStr_WiiBootDOL))
-	@$(MAKE) --quiet $(MAKEFLAGS) all_wii PLAT_WII=1
+	@$(MAKE) --quiet all_wii PLAT_WII=1
 
 all_wii: bin/boot.dol
 	$(info Successfully built for $(platStr_WiiBootDOL)!)
