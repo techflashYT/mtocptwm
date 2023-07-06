@@ -1,4 +1,4 @@
 #include <unistd.h>
-void platformTxLoop() {
+void PLAT_TxLoop() {
 	sleep(5);
 }

@@ -6,7 +6,7 @@
 #include <windows.h>
 #include <ws2tcpip.h>
 #include <iphlpapi.h>
-void __attribute__ ((noreturn)) platformExit(bool err) {
+void __attribute__ ((noreturn)) PLAT_Exit(bool err) {
 	close(netInfo.socket);
 	WSACleanup();
 

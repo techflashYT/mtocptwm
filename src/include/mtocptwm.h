@@ -14,5 +14,5 @@ typedef struct {
 } netInfo_t;
 
 extern netInfo_t netInfo;
-void __attribute__ ((noreturn)) platformExit(bool err);
-void platformTxLoop();
+void __attribute__ ((noreturn)) PLAT_Exit(bool err);
+void PLAT_TxLoop();

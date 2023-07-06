@@ -14,7 +14,7 @@
 #include "../common/menu.c"
 static void *xfb;
 static GXRModeObj *rmode;
-void platformInit(int *argc, char *argv[]) {
+void PLAT_Init(int *argc, char *argv[]) {
 	VIDEO_Init();
 
 	// Init wiimotes
@@ -54,9 +54,9 @@ void platformInit(int *argc, char *argv[]) {
 	*argc = 2;
 	int selected = 0;
 	int ret;
-	menuInit();
+	TMENU_Init();
 	while (true) {
-		ret = scanWiimotes();
+		ret = WII_HandleRemotes();
 		if (ret == 0x69) {
 			VIDEO_WaitVSync();
 			continue;
@@ -85,7 +85,7 @@ void platformInit(int *argc, char *argv[]) {
 				selected--;
 			}
 		}
-		menu(selected);
+		TMENU_Run(selected);
 		VIDEO_WaitVSync();
 	}
 	puts("\x1b[1;1H\x1b[2J");

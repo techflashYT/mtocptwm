@@ -5,7 +5,7 @@
 #include <unistd.h>
 #include <stdlib.h>
 #include <platWii.h>
-int scanWiimotes() {
+int WII_HandleRemotes() {
 	// scan for controller updates
 	WPAD_ScanPads();
 

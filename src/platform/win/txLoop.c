@@ -3,6 +3,6 @@
 #endif
 
 #include <windows.h>
-void platformTxLoop() {
+void PLAT_TxLoop() {
 	Sleep(5000);
 }

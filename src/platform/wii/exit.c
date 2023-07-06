@@ -6,7 +6,7 @@
 #include <stdbool.h>
 #include <fcntl.h>
 #include <mtocptwm.h>
-void __attribute__ ((noreturn)) platformExit(bool err) {
+void __attribute__ ((noreturn)) PLAT_Exit(bool err) {
 	net_deinit();
 	WPAD_Shutdown();
 	net_shutdown(netInfo.socket, 2);

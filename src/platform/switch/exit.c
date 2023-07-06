@@ -5,7 +5,7 @@
 #include <sys/socket.h>
 #include <nswitch.h>
 #include <mtocptwm.h>
-void __attribute__ ((noreturn)) platformExit(bool err) {
+void __attribute__ ((noreturn)) PLAT_Exit(bool err) {
 	consoleUpdate(NULL);
 	shutdown(netInfo.socket, SHUT_RDWR);
 	close(netInfo.socket);
