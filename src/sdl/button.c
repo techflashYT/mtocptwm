@@ -28,7 +28,7 @@ bool button(SDL_Renderer *r, button_t *btn) {
 		exit(1);
 	}
 	SDL_Color bg = { .r = 0, .g = 0, .b = 0, .a = 0 };
-	SDL_Texture *texture = FONT_Draw(btn->text, sansFont, btn->color, bg, FONT_RendStyle_Shaded);
+	SDL_Texture *texture = FONT_Draw(btn->text, sansFont_12, btn->color, bg, FONT_RendStyle_Shaded);
 	ret = SDL_RenderCopy(r, texture, NULL, &btn->drawRect);
 	if (ret != 0) {
 		printf("failed to copy SDL texture to rect: %s", SDL_GetError());

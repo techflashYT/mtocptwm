@@ -1,7 +1,9 @@
 #include "font.h"
 #include "data.h"
 #include "vars.h"
-TTF_Font *sansFont;
+TTF_Font *sansFont_8;
+TTF_Font *sansFont_12;
+TTF_Font *sansFont_16;
 SDL_RWops*sansFontRWOps;
 void FONT_Init() {
     if (TTF_Init() != 0) {
@@ -14,8 +16,10 @@ void FONT_Init() {
 		printf("error creating SDL RWops from mem: %s", SDL_GetError());
 		exit(1);
 	}
-	sansFont = TTF_OpenFontRW(sansFontRWOps, false, 12);
-	if (sansFont == NULL) {
+	sansFont_8  = TTF_OpenFontRW(sansFontRWOps, false, 8);
+	sansFont_12 = TTF_OpenFontRW(sansFontRWOps, false, 12);
+	sansFont_16 = TTF_OpenFontRW(sansFontRWOps, false, 16);
+	if (sansFont_8 == NULL || sansFont_12 == NULL || sansFont_16 == NULL) {
 		printf("error creating SDL-TTF Font from RWops: %s", SDL_GetError());
 		exit(1);
 	}

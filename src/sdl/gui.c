@@ -88,7 +88,9 @@ int GUI_Main() {
 	SDL_DestroyWindow(win);
 	
 	// close font
-	TTF_CloseFont(sansFont);
+	TTF_CloseFont(sansFont_8);
+	TTF_CloseFont(sansFont_12);
+	TTF_CloseFont(sansFont_16);
 
 	// close rwops for font
 	ret = SDL_RWclose(sansFontRWOps);
