@@ -34,7 +34,7 @@ void handleArgs(int argc, char *argv[]) {
 			while (true) { sleep(5); }
 		}
 		if (pid >= 1) {
-			GUI_Main();
+			// start GUI here
 			exit(0);
 		}
 	}
