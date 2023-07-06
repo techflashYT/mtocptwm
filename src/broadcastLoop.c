@@ -39,19 +39,19 @@ extern struct sockaddr_in addr;
 
 #include <mtocptwm.h>
 
-static void transmit(const char *message);
-static void recieve();
-void broadcastLoop(const char *message, const bool mode) {
+static void NET_Tx(const char *message);
+static void NET_Rx();
+void NET_Loop(const char *message, const bool mode) {
 	if (mode == false) {
-		transmit(message);
+		NET_Tx(message);
 	}
 	else {
-		recieve();
+		NET_Rx();
 	}
 }
 
 
-static void transmit(const char *message) {
+static void NET_Tx(const char *message) {
 	addr.sin_addr.s_addr = inet_addr(netInfo.multicastIP);
 	int i = 0;
 	while (1) {
@@ -77,19 +77,19 @@ static void transmit(const char *message) {
 			perror("sendto err");
 			printf("\r\nreturn value: %d\r\n", result);
 
-			platformExit(true);
+			PLAT_Exit(true);
 		}
-		platformTxLoop();
+		PLAT_TxLoop();
 	}
 }
 
 
-static void recieve() {
+static void NET_Rx() {
 	#if __SWITCH__
 	puts("This option is broken on Switch!!!\r\nIt simply will not work correctly.");
 	consoleUpdate(NULL);
 	sleep(2);
-	platformExit(true);
+	PLAT_Exit(true);
 	#endif
 	char buf[128];
 	int ret = bind(netInfo.socket, (struct sockaddr *) &addr, sizeof(addr));
@@ -101,7 +101,7 @@ static void recieve() {
 		perror("bind");
 		printf("\r\nreturn value: %d\r\n", ret);
 
-		platformExit(true);
+		PLAT_Exit(true);
 	}
 	#if PLAT_LINUX || __SWITCH__
 		struct ip_mreq mreq;
@@ -115,12 +115,12 @@ static void recieve() {
 			perror("setsockopt mreq");
 			printf("\r\nreturn value: %d\r\n", ret);
 			
-			platformExit(true);
+			PLAT_Exit(true);
 		}
 	#endif
 	while (1) {
 		#ifdef PLAT_WII
-		scanWiimotes();
+		WII_HandleRemotes();
 		#endif
 		int res = recvfrom(netInfo.socket, buf, 128, 0, (struct sockaddr *) &addr, &addrlen);
 		if (res < 0) {
@@ -131,7 +131,7 @@ static void recieve() {
 			perror("recvfrom");
 			printf("\r\nreturn value: %d\r\n", ret);
 
-			platformExit(true);
+			PLAT_Exit(true);
 		}
 		else if (res == 0) {
 			break;

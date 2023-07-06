@@ -40,7 +40,7 @@ netInfo_t netInfo;
 
 static void setupMulticastSocket();
 static void getHostname();
-void setupNet() {
+void NET_Init() {
 	setupMulticastSocket();
 	getHostname();
 }
@@ -61,7 +61,7 @@ static void setupMulticastSocket() {
 			
 		perror("socket err");
 		printf("returned: %d", netInfo.socket);
-		platformExit(true);
+		PLAT_Exit(true);
 	}
 	memset((char *)&addr, 0, sizeof(addr));
 	addr.sin_family = AF_INET;

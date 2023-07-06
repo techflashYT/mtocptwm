@@ -10,7 +10,7 @@
 WSADATA wsaData;
 
 
-void platformInit(__attribute__((unused)) int *argc, __attribute__((unused)) char *argv[]) {
+void PLAT_Init(__attribute__((unused)) int *argc, __attribute__((unused)) char *argv[]) {
 	// initialize WinSock2
 	int res = WSAStartup(MAKEWORD(2,2), &wsaData);
 	if (res != 0) {

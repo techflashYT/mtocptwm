@@ -6,7 +6,7 @@
 
 extern int GUI_Main();
 extern bool mode;
-void handleArgs(int argc, char *argv[]) {
+void ARG_Init(int argc, char *argv[]) {
 	bool badArgs = false;
 	if (argc > 2)  {badArgs = true;}
 	if (argc == 2) {
@@ -16,7 +16,7 @@ void handleArgs(int argc, char *argv[]) {
 	}
 	if (badArgs) {
 		puts("Please give argument `r` or `t` for recieve or transmit, or none to start GUI.");
-		platformExit(true);
+		PLAT_Exit(true);
 	}
 	// no args, handle GUI stuff
 	if (argc == 1) {

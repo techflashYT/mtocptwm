@@ -3,7 +3,7 @@
 #include "../common/menu.c"
 extern int shouldExit;
 PadState pad;
-void platformInit(int *argc, char *argv[]) {
+void PLAT_Init(int *argc, char *argv[]) {
 	socketInitializeDefault();
 	// nxlinkStdio();
 	// initialize the text console
@@ -18,7 +18,7 @@ void platformInit(int *argc, char *argv[]) {
 	uint64_t buttons;
 	uint_fast8_t selected = 0;
 	*argc = 2;
-	menuInit();
+	TMENU_Init();
 
 	while (appletMainLoop()) {
 		// scan gamepad
@@ -55,7 +55,7 @@ void platformInit(int *argc, char *argv[]) {
 			}
 		}
 		
-		menu(selected);
+		TMENU_Run(selected);
 		consoleUpdate(NULL);
 	}
 	puts("\x1b[1;1H\x1b[2J");
