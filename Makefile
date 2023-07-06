@@ -15,7 +15,7 @@ include util/plat/*.mk
 
 # make a linux build if no platform is selected.
 
-LIBS+= -lasan -lubsan -lSDL2 -lGL 
+LIBS+= -lasan -lubsan -lSDL2 -lSDL2_ttf -lGL 
 
 bin/mtocptwm: $(compile_plat) $(compile)
 	@mkdir -p $(@D)

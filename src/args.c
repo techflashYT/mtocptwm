@@ -4,7 +4,7 @@
 #include <stdlib.h>
 #include <signal.h>
 
-extern int guiMain();
+extern int GUI_Main();
 extern bool mode;
 void handleArgs(int argc, char *argv[]) {
 	bool badArgs = false;
@@ -20,7 +20,6 @@ void handleArgs(int argc, char *argv[]) {
 	}
 	// no args, handle GUI stuff
 	if (argc == 1) {
-		pid_t parent = getpid();
 		pid_t pid = fork();
 		if (pid == -1) {
 			// error
@@ -28,13 +27,14 @@ void handleArgs(int argc, char *argv[]) {
 			exit(1);
 		}
 		if (pid == 0) {
-			// TODO: parent process, find some way to communicate with the child, then wait for the child (SDL) to tell us the mode.  Some ideas, ranked in order of how good they are:
-			// - redirect stdout to the child's stdin (would require minimal changes, like opening a pipe, then redirecting our stdout to the pipe's input, and redirecting our stdin to the pipe's output)
+			// TODO: child process, find some way to communicate with the parent, then wait for the parent (SDL) to tell us the mode.  Some ideas, ranked in order of how good they are:
+			// - redirect stdout to the parent's stdin (would require minimal changes, like opening a pipe, then redirecting our stdout to the pipe's input, and redirecting our stdin to the pipe's output)
 			// - IPC
 			// - temporary files
+			while (true) { sleep(5); }
 		}
 		if (pid >= 1) {
-			guiMain();
+			GUI_Main();
 			exit(0);
 		}
 	}
