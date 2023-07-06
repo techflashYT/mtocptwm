@@ -15,7 +15,7 @@ int GUI_Main() {
 		printf("error initializing SDL: %s\n", SDL_GetError());
 		exit(1);
 	}
-	win = SDL_CreateWindow("MTOCPTWM", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 500, 500, 0);
+	win = SDL_CreateWindow("MTOCPTWM", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 640, 480, 0);
 
 	FONT_Init();
 	// triggers the program that controls
