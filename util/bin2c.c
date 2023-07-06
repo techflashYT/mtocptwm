@@ -46,6 +46,7 @@ int main(int argc, char *argv[]) {
     f_output = fopen(argv[2], "w");
     if (f_output == NULL) {
         fprintf(stderr, "%s: can't open %s for writing\n", argv[0], argv[2]);
+        free(buf);
         return -1;
     }
 
@@ -53,7 +54,7 @@ int main(int argc, char *argv[]) {
 
     needComma = 0;
 
-    fprintf(f_output, "const char %s[%i] = {", ident, fileSize);
+    fprintf(f_output, "const unsigned char %s[%i] = {", ident, fileSize);
     for (i = 0; i < fileSize; ++i) {
         if (needComma) {
             fprintf(f_output, ", ");
@@ -67,7 +68,7 @@ int main(int argc, char *argv[]) {
     }
     fprintf(f_output, "\n};\n\n");
 
-    fprintf(f_output, "const int %s_length = %i;\n", ident, fileSize);
+    fprintf(f_output, "const int %s_Size = %i;\n", ident, fileSize);
 
     fclose(f_output);
 

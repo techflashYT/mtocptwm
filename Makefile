@@ -26,18 +26,22 @@ build/font/%.o: build/font/%.c
 	@$(info $s    CC $< => $@)
 	@$(CC) $(CFLAGS) -c $< -o $@
 
-build/font/FreeSans.o: %.ttf
-	@$(info $s BIN2C $^ ==> $@)
-	@util/bin2c $^ $@ DATA_Font_Sans
-build/font/FreeMono.o: %.ttf
-	@$(info $s BIN2C $^ ==> $@)
-	@util/bin2c $^ $@ DATA_Font_Mono
+build/font/FreeSans.c: misc/freefont-20120503/FreeSans.ttf util/bin2c
+	@mkdir -p $(@D)
+
+	@$(info $s BIN2C $< ==> $@)
+	@util/bin2c $< $@ DATA_FontSans
+build/font/FreeMono.c: misc/freefont-20120503/FreeMono.ttf util/bin2c
+	@mkdir -p $(@D)
+
+	@$(info $s BIN2C $< ==> $@)
+	@util/bin2c $< $@ DATA_FontMono
 
 util/bin2c: util/bin2c.c
 	@mkdir -p $(@D)
 
 	@$(info $s    CC $< => $@)
-	@$(CC) $(CFLAGS) -c $< -o $@
+	@$(CC) $(CFLAGS) $< -o $@
 
 bin/mtocptwm: $(compile_plat) $(compile) $(fonts)
 	@mkdir -p $(@D)
@@ -51,4 +55,4 @@ build/%.o: %.c $(includes)
 	@$(CC) $(CFLAGS) -c $< -o $@
 
 clean:
-	@rm -rf build bin
+	@rm -rf build bin util/bin2c
