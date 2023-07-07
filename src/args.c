@@ -6,10 +6,29 @@
 #if __SWITCH__
 #include <nswitch.h>
 #endif
-
+#include <sys/socket.h>
+#include <netinet/in.h>
+#include <string.h>
 
 extern int GUI_Main(char *envp[]);
 extern bool mode;
+
+
+static void communicate(int socket) {
+    char buffer[64];
+    ssize_t bytesRead;
+
+    while ((bytesRead = read(socket, buffer, 64)) > 0) {
+        if (buffer[bytesRead - 1] == '\0') {
+            printf("Received: %s\n", buffer);
+            break;
+        }
+    }
+
+    // Close the socket
+    // close(socket);
+}
+
 void ARG_Init(int argc, char *argv[], char *envp[]) {
 	bool badArgs = false;
 	if (argc > 2)  {badArgs = true;}
@@ -24,32 +43,73 @@ void ARG_Init(int argc, char *argv[], char *envp[]) {
 	}
 	// no args, handle GUI stuff
 	if (argc == 1) {
-		#ifdef __SWITCH__
-			Thread t;
-			Result res = threadCreate(&t, (ThreadFunc)GUI_Main, envp, NULL, 1048576, 0x3B, 2);
-			if (res != 0) {
-				fatalThrow(res);
+		int serverSocket, clientSocket;
+		struct sockaddr_in serverAddr, clientAddr;
+		socklen_t addrLen = sizeof(struct sockaddr_in);
+
+		// Create socket
+		serverSocket = socket(AF_INET, SOCK_STREAM, 0);
+		if (serverSocket == -1) {
+			perror("socket");
+			exit(1);
+		}
+
+		// Prepare the server address
+		memset(&serverAddr, 0, sizeof(struct sockaddr_in));
+		serverAddr.sin_family = AF_INET;
+		serverAddr.sin_addr.s_addr = htonl(INADDR_LOOPBACK);
+		serverAddr.sin_port = htons(40435);
+
+		// Bind the socket to localhost
+		if (bind(serverSocket, (struct sockaddr *)&serverAddr, sizeof(struct sockaddr_in)) == -1) {
+			perror("bind");
+			exit(1);
+		}
+
+		// Listen for connections
+		if (listen(serverSocket, 1) == -1) {
+			perror("listen");
+			exit(1);
+		}
+
+		pid_t pid = fork();
+		if (pid == -1) {
+			// error
+			perror("fork");
+			exit(1);
+		}
+		if (pid == 0) {
+			clientSocket = socket(AF_INET, SOCK_STREAM, 0);
+			if (clientSocket == -1) {
+				perror("socket");
+				exit(EXIT_FAILURE);
 			}
-			threadStart(&t);
-			while (true) { sleep(5); }
-		#else
-			pid_t pid = fork();
-			if (pid == -1) {
-				// error
-				perror("fork");
-				exit(1);
+
+			// Connect to the server
+			if (connect(clientSocket, (struct sockaddr *)&serverAddr, sizeof(struct sockaddr_in)) == -1) {
+				perror("connect");
+				exit(EXIT_FAILURE);
 			}
-			if (pid == 0) {
-				// TODO: child process, find some way to communicate with the parent, then wait for the parent (SDL) to tell us the mode.  Some ideas, ranked in order of how good they are:
-				// - redirect stdout to the parent's stdin (would require minimal changes, like opening a pipe, then redirecting our stdout to the pipe's input, and redirecting our stdin to the pipe's output)
-				// - IPC
-				// - temporary files
-				while (true) { sleep(5); }
+
+			communicate(clientSocket);
+		}
+		if (pid >= 1) {
+			// parent
+			// Accept a client connection
+			clientSocket = accept(serverSocket, (struct sockaddr *)&clientAddr, &addrLen);
+			if (clientSocket == -1) {
+				perror("accept");
+				exit(EXIT_FAILURE);
 			}
-			if (pid >= 1) {
-				GUI_Main(envp);
-				exit(0);
+
+			// Replace stdin and stdout with the client socket
+			if (dup2(clientSocket, STDIN_FILENO) == -1 || dup2(clientSocket, STDOUT_FILENO) == -1) {
+				perror("dup2");
+				exit(EXIT_FAILURE);
 			}
-		#endif
+
+			GUI_Main(envp);
+			exit(0);
+		}
 	}
 }

@@ -1,38 +1,31 @@
-const { app, BrowserWindow } = require('electron')
-const path = require('path')
-const fs = require('fs')
+const fs = require("fs");
+const os = require("os");
+const { copyConfFromMcast, establishConnect } = require("./pipeio.js");
+establishConnect();
 
-const config = './mtocptwm.cfg'
-
-try {
-	//require('electron-reloader')(module)
-} catch (_) { }
-
-const createWindow = () => {
-	const win = new BrowserWindow({
-		webPreferences: {
-			preload: path.join(__dirname, 'preload.js')
-		}
-	});
-
-	try {
-		if (fs.existsSync(config)) {
-			win.loadFile('index.html')
-		}
-		else {
-			win.loadFile('setup.html')
-		}
-	} catch (err) {
-		console.error(err)
-	}
-
+var configLocation;
+if (process.platform == "win32") {
+	configLocation = `C:\\Users\\${os.userInfo().username}\\AppData\\Roaming\\mtocptwm\\config.cfg`
 }
-app.on('window-all-closed', () => {
-	if (process.platform !== 'darwin') app.quit()
-})
-app.whenReady().then(() => {
-	createWindow()
-	app.on('activate', () => {
-		if (BrowserWindow.getAllWindows().length === 0) createWindow()
-	})
-})
+else if (process.platform == "darwin") {
+	configLocation = `/Users/${os.userInfo().username}/Library/Preferences/mtocptwm/config.cfg`
+}
+else {
+	// probably unix-esque
+	configLocation = `/home/${os.userInfo().username}/.config/mtocptwm/config.cfg`
+}
+if (!fs.existsSync(configLocation)) {
+	console.log("config doesn't exist, do setup")
+	document.addEventListener("DOMContentLoaded", doSetup);
+}
+function doSetup() {
+	var title = document.getElementById('title');
+	title.textContent = title.textContent.replace("mtocptwm", "mtocptwm setup")
+	document.body.insertAdjacentHTML("beforeend",
+`
+<p>It looks like this is your first time using mtocptwm. Please choose an option to begin setup</p>
+<button onclick="copyConfFromMcast()">Copy config from another instance</button>
+<button onclick="newConfig()">Create new config</button>
+`
+	)
+}
