@@ -1,8 +1,10 @@
 const { app, BrowserWindow } = require('electron')
 const path = require('path')
+const fs = require('fs')
+
 try {
-	require('electron-reloader')(module)
-} catch (_) {}
+	//require('electron-reloader')(module)
+} catch (_) { }
 
 const createWindow = () => {
 	const win = new BrowserWindow({
@@ -18,7 +20,6 @@ app.on('window-all-closed', () => {
 })
 app.whenReady().then(() => {
 	createWindow()
-
 	app.on('activate', () => {
 		if (BrowserWindow.getAllWindows().length === 0) createWindow()
 	})
