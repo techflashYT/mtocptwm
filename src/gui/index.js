@@ -1,5 +1,8 @@
 const { app, BrowserWindow } = require('electron')
 const path = require('path')
+const fs = require('fs')
+
+const config = './mtocptwm.cfg'
 
 try {
 	//require('electron-reloader')(module)
@@ -12,7 +15,17 @@ const createWindow = () => {
 		}
 	});
 
-	win.loadFile('index.html')
+	try {
+		if (fs.existsSync(config)) {
+			win.loadFile('index.html')
+		}
+		else {
+			win.loadFile('setup.html')
+		}
+	} catch (err) {
+		console.error(err)
+	}
+
 }
 app.on('window-all-closed', () => {
 	if (process.platform !== 'darwin') app.quit()
