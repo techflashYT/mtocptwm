@@ -1,4 +1,4 @@
-ORIGCFLAGS = -Wall -Wextra -Wpedantic -O0 -g -Isrc/include -std=gnu2x -flto -g
+ORIGCFLAGS = -Wall -Wextra -Wpedantic -O0 -g -Isrc/include -std=gnu2x -flto 
 CFLAGS=$(ORIGCFLAGS)
 LDFLAGS = -flto -g 
 

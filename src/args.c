@@ -8,9 +8,9 @@
 #endif
 
 
-extern int GUI_Main();
+extern int GUI_Main(char *envp[]);
 extern bool mode;
-void ARG_Init(int argc, char *argv[]) {
+void ARG_Init(int argc, char *argv[], char *envp[]) {
 	bool badArgs = false;
 	if (argc > 2)  {badArgs = true;}
 	if (argc == 2) {
@@ -26,7 +26,7 @@ void ARG_Init(int argc, char *argv[]) {
 	if (argc == 1) {
 		#ifdef __SWITCH__
 			Thread t;
-			Result res = threadCreate(&t, (ThreadFunc)GUI_Main, NULL, NULL, 1048576, 0x3B, 2);
+			Result res = threadCreate(&t, (ThreadFunc)GUI_Main, envp, NULL, 1048576, 0x3B, 2);
 			if (res != 0) {
 				fatalThrow(res);
 			}
@@ -47,7 +47,7 @@ void ARG_Init(int argc, char *argv[]) {
 				while (true) { sleep(5); }
 			}
 			if (pid >= 1) {
-				GUI_Main();
+				GUI_Main(envp);
 				exit(0);
 			}
 		#endif

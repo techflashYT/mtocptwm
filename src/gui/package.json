@@ -1,0 +1,38 @@
+{
+  "name": "mtocptwm-gui",
+  "version": "1.0.0",
+  "description": "GUI for mtocptwm",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "electron-forge start",
+    "package": "electron-forge package",
+    "make": "electron-forge make"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/TechflashYT/mtocptwm.git"
+  },
+  "keywords": [
+    "gui"
+  ],
+  "author": "Techflash",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/TechflashYT/mtocptwm/issues"
+  },
+  "homepage": "https://github.com/TechflashYT/mtocptwm#readme",
+  "devDependencies": {
+    "@electron-forge/cli": "^6.2.1",
+    "@electron-forge/maker-deb": "^6.2.1",
+    "@electron-forge/maker-rpm": "^6.2.1",
+    "@electron-forge/maker-squirrel": "^6.2.1",
+    "@electron-forge/maker-zip": "^6.2.1",
+    "@electron-forge/plugin-auto-unpack-natives": "^6.2.1",
+    "electron": "^25.2.0",
+    "electron-reloader": "^1.2.3"
+  },
+  "dependencies": {
+    "electron-squirrel-startup": "^1.0.0"
+  }
+}
