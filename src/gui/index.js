@@ -24,7 +24,7 @@ function doSetup() {
 	document.body.insertAdjacentHTML("beforeend",
 `
 <p>It looks like this is your first time using mtocptwm. Please choose an option to begin setup</p>
-<button onclick="copyConfFromMcast()">Copy config from another instance</button>
+<button onclick="ipc.copyConfFromMcast()">Copy config from another instance</button>
 <button onclick="newConfig()">Create new config</button>
 `
 	)

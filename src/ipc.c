@@ -25,6 +25,21 @@ void NET_SetupIPCLocalhost() {
 	serverAddr.sin_port = htons(40435);
 
 	// Bind the socket to localhost
+	int reuse = 1;
+	if (setsockopt(serverSocket, SOL_SOCKET, SO_REUSEADDR, &reuse, sizeof(reuse)) == -1) {
+		perror("setsockopt");
+		exit(1);
+	}
+	struct linger linger_opt;
+	linger_opt.l_onoff = 1;  // Enable linger
+	linger_opt.l_linger = 0;  // Set the timeout to 0
+
+	if (setsockopt(serverSocket, SOL_SOCKET, SO_LINGER, &linger_opt, sizeof(linger_opt)) == -1) {
+		perror("setsockopt");
+		exit(1);
+	}
+
+
 	if (bind(serverSocket, (struct sockaddr *)&serverAddr, sizeof(struct sockaddr_in)) == -1) {
 		perror("bind");
 		exit(1);
@@ -37,20 +52,6 @@ void NET_SetupIPCLocalhost() {
 	}
 }
 
-void parentSetup() {
-	clientSocket = socket(AF_INET, SOCK_STREAM, 0);
-	if (clientSocket == -1) {
-		perror("socket");
-		exit(1);
-	}
-
-	// Connect to the server
-	if (connect(clientSocket, (struct sockaddr *)&serverAddr, sizeof(struct sockaddr_in)) == -1) {
-		perror("connect");
-		exit(1);
-	}
-}
-
 void childSetup() {
 	// Accept a client connection
 	clientSocket = accept(serverSocket, (struct sockaddr *)&clientAddr, &addrLen);
@@ -58,12 +59,7 @@ void childSetup() {
 		perror("accept");
 		exit(1);
 	}
-
-	// Replace stdin and stdout with the client socket
-	if (dup2(clientSocket, STDIN_FILENO) == -1 || dup2(clientSocket, STDOUT_FILENO) == -1) {
-		perror("dup2");
-		exit(1);
-	}
+	printf("child socket: %d\r\n", clientSocket);
 }
 
 void communicate() {
@@ -71,8 +67,12 @@ void communicate() {
 	uint8_t tmp;
 	uint_fast8_t i = 0;;
 
+	fputs("waiting for data...\r\n", stderr);
 	while (1) {
-		fputs("reading from sock\r\n", stderr);
+		if (write(clientSocket, "hellorld", 9) != 9) {
+			perror("write");
+			break;
+		}
 		if (read(clientSocket, &tmp, 1) <= 0) {
 			fputs("dying now\r\n", stderr);
 			break;

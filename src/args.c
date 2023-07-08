@@ -45,8 +45,6 @@ void ARG_Init(int argc, char *argv[], char *envp[]) {
 		}
 		if (pid >= 1) {
 			// parent
-			parentSetup();
-
 			GUI_Main(envp);
 			exit(0);
 		}
