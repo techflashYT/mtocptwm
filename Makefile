@@ -15,7 +15,7 @@ include util/strings.mk
 include util/plat/*.mk
 
 
-.PHONY: linux all_linux windows win win64 win32 all_win32 all_win64 switch all_switch run_switch clean
+.PHONY: linux linux-gui all_linux windows win win64 win32 all_win32 all_win64 switch all_switch run_switch clean
 
 # make a linux build if no platform is selected.
 

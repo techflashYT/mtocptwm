@@ -17,6 +17,10 @@ const createWindow = () => {
 
 	win.loadFile('index.html')
 }
+app.on("quit", () => {
+	ipcSock.write("exit\0");
+	ipcSock.destroy();
+})
 app.on('window-all-closed', () => {
 	if (process.platform !== 'darwin') app.quit()
 })

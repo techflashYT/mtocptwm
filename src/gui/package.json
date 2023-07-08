@@ -1,5 +1,5 @@
 {
-  "name": "mtocptwm-gui",
+  "name": "gui",
   "version": "1.0.0",
   "description": "GUI for mtocptwm",
   "main": "main.js",

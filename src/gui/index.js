@@ -1,7 +1,7 @@
 const fs = require("fs");
 const os = require("os");
-const { copyConfFromMcast, establishConnect } = require("./pipeio.js");
-establishConnect();
+const ipc = require("./ipc.js");
+ipc.establishConnect();
 
 var configLocation;
 if (process.platform == "win32") {
