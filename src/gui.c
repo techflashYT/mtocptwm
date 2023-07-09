@@ -10,7 +10,7 @@ static void GUI_Main(char *envp[]) {
 	char *argv[] = { "./gui", NULL };
 	execve("./gui", argv, envp);
 	perror("./gui");
-	exit(1);
+	PLAT_Exit(true);
 }
 void GUI_Init(char *envp[]) {
 	NET_SetupIPCLocalhost();
@@ -19,7 +19,7 @@ void GUI_Init(char *envp[]) {
 	if (pid == -1) {
 		// error
 		perror("fork");
-		exit(1);
+		PLAT_Exit(true);
 	}
 	if (pid == 0) {
 		childSetup();
@@ -28,6 +28,6 @@ void GUI_Init(char *envp[]) {
 	if (pid >= 1) {
 		// parent
 		GUI_Main(envp);
-		exit(0);
+		PLAT_Exit(false);
 	}
 }

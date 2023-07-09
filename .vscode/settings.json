@@ -1,5 +1,7 @@
 {
 	"files.associations": {
-		"mtocptwm.h": "c"
+		"mtocptwm.h": "c",
+		"stdio.h": "c",
+		"cstdint": "c"
 	}
 }
