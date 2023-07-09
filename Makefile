@@ -30,17 +30,6 @@ build/font/%.o: build/font/%.c
 	@$(info $s    CC $< => $@)
 	@$(CC) $(CFLAGS) -c $< -o $@
 
-build/font/FreeSans.c: misc/freefont-20120503/FreeSans.ttf util/bin2c
-	@mkdir -p $(@D)
-
-	@$(info $s BIN2C $< ==> $@)
-	@util/bin2c $< $@ DATA_FontSans
-build/font/FreeMono.c: misc/freefont-20120503/FreeMono.ttf util/bin2c
-	@mkdir -p $(@D)
-
-	@$(info $s BIN2C $< ==> $@)
-	@util/bin2c $< $@ DATA_FontMono
-
 util/bin2c: util/bin2c.c
 	@mkdir -p $(@D)
 
