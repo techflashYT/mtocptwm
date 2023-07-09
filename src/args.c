@@ -12,7 +12,7 @@
 extern bool mode;
 extern bool doGUI;
 
-void ARG_Init(int argc, char *argv[], char *envp[]) {
+void ARG_Init(int argc, char *argv[]) {
 	bool badArgs = false;
 	if (argc > 2)  {badArgs = true;}
 	if (argc == 2) {

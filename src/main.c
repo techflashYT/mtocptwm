@@ -10,7 +10,7 @@
 extern void NET_Init();
 extern void NET_Loop(const char *message, const bool mode);
 extern void PLAT_Init(int *argc, char *argv[]);
-extern void ARG_Init(int argc, char *argv[], char *evnp[]);
+extern void ARG_Init(int argc, char *argv[]);
 extern void GUI_Init(char *envp[]);
 bool mode;
 bool doGUI;
@@ -18,7 +18,7 @@ bool doGUI;
 
 int main(int argc, char *argv[], char *envp[]) {
 	PLAT_Init(&argc, argv);
-	ARG_Init(argc, argv, envp);
+	ARG_Init(argc, argv);
 	NET_Init();
 
 	char message[124];

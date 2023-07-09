@@ -2,6 +2,8 @@
 #include <ifaddrs.h>
 #include <string.h>
 #include <netinet/in.h>
+#include <stdlib.h>
+#include <arpa/inet.h>
 void PLAT_GetIPv4(char *ifname, char *addr) {
 	struct ifaddrs *ifaddr, *ifa;
     struct sockaddr_in *sa;
@@ -9,17 +11,20 @@ void PLAT_GetIPv4(char *ifname, char *addr) {
     getifaddrs(&ifaddr);
 
     for (ifa = ifaddr; ifa != NULL; ifa = ifa->ifa_next) {
-        if (ifa->ifa_addr == NULL || ifa->ifa_addr->sa_family != AF_INET)
+        if (ifa->ifa_addr == NULL || ifa->ifa_addr->sa_family != AF_INET) {
             continue;
+        }
 
         if (strcmp(ifa->ifa_name, ifname) == 0) {
             sa = (struct sockaddr_in *)ifa->ifa_addr;
             inet_ntop(AF_INET, &(sa->sin_addr), addr, INET_ADDRSTRLEN);
             freeifaddrs(ifaddr);
-            return 0;
+            return;
         }
     }
 
     freeifaddrs(ifaddr);
-    return -1;
+    ifname = NULL;
+    addr = NULL;
+    return;
 }

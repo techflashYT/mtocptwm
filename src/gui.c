@@ -6,6 +6,7 @@
 extern void NET_SetupIPCLocalhost();
 
 static void GUI_Main(char *envp[]) {
+	sleep(10000);
 	char *argv[] = { "./gui", NULL };
 	execve("./gui", argv, envp);
 	perror("./gui");

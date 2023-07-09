@@ -68,7 +68,7 @@ void communicate() {
 	uint_fast8_t i = 0;;
 	// bool connected = false;
 
-	fputs("waiting for data...\r\n", stderr);
+	puts("waiting for data...");
 	while (1) {
 		if (read(clientSocket, &tmp, 1) <= 0) {
 			fputs("dying now\r\n", stderr);
@@ -77,10 +77,10 @@ void communicate() {
 		buffer[i] = tmp;
 
 		if (buffer[i] == '\0') {
-			fprintf(stderr, "Received from parent: %s\n", buffer);
+			printf("Received from parent: %s\n", buffer);
 
 			if (strcmp(buffer, "exit") == 0) {
-				fputs("exiting...", stderr);
+				fputs("exiting...\r\n", stderr);
 				break;
 			}
 			else if (strcmp(buffer, "hello ipc") == 0) {
@@ -89,8 +89,11 @@ void communicate() {
 				write(clientSocket, "welcome", 7);
 				// connected = true;
 			}
-			else if (strcmp(buffer, "mcastCopy")) {
-				
+			else if (strcmp(buffer, "mcastCopy") == 0) {
+				puts("copy");
+			}
+			else {
+				fputs("bad cmd\r\n", stderr);
 			}
 			
 			i = 0;
