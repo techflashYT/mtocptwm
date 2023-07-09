@@ -31,6 +31,14 @@ extern struct sockaddr_in addr;
 
 static void NET_Tx(const char *message);
 static void NET_Rx();
+
+/* TODO: complete redesign
+
+	- only loop for specified amount of times
+	- work when called with little/no boilerplate
+	- timeout of specified seconds for NET_Rx
+	- general cleanup
+*/
 void NET_Loop(const char *message, const bool mode) {
 	if (mode == false) {
 		NET_Tx(message);
