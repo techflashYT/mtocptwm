@@ -4,12 +4,9 @@ LDFLAGS = -flto -g
 
 includes = $(shell find -O3 src/include)
 vpath %.c src
-vpath %.ttf misc/freefont-20120503
 vpath %.h src/include
 
 compile=$(patsubst src/%.c,build/%.o,$(shell find -O3 src -name '*.c' | grep -v 'platform/'))
-fontList=FreeSans.ttf FreeMono.ttf
-fonts=$(patsubst %.ttf,build/font/%.o,$(fontList))
 default: linux
 include util/strings.mk
 include util/plat/*.mk
@@ -24,12 +21,6 @@ ifeq ($(strip $(PLAT_NSWITCH)),)
 LIBS+=-lGL
 endif
 
-build/font/%.o: build/font/%.c
-	@mkdir -p $(@D)
-
-	@$(info $s    CC $< => $@)
-	@$(CC) $(CFLAGS) -c $< -o $@
-
 util/bin2c: util/bin2c.c
 	@mkdir -p $(@D)
 
@@ -37,7 +28,7 @@ util/bin2c: util/bin2c.c
 # uses system gcc
 	@gcc $(ORIGCFLAGS) $< -o $@
 
-bin/mtocptwm: $(compile_plat) $(compile) $(fonts)
+bin/mtocptwm: $(compile_plat) $(compile)
 	@mkdir -p $(@D)
 	@$(info $s    LD $^ ==> $@)
 	@$(LD) $(LDFLAGS) $^ $(LIBS) -o $@
