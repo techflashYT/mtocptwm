@@ -63,16 +63,13 @@ void childSetup() {
 }
 
 void communicate() {
-	uint8_t buffer[64];
+	char buffer[64];
 	uint8_t tmp;
 	uint_fast8_t i = 0;;
+	// bool connected = false;
 
 	fputs("waiting for data...\r\n", stderr);
 	while (1) {
-		if (write(clientSocket, "hellorld", 9) != 9) {
-			perror("write");
-			break;
-		}
 		if (read(clientSocket, &tmp, 1) <= 0) {
 			fputs("dying now\r\n", stderr);
 			break;
@@ -81,14 +78,19 @@ void communicate() {
 
 		if (buffer[i] == '\0') {
 			fprintf(stderr, "Received from parent: %s\n", buffer);
+
 			if (strcmp(buffer, "exit") == 0) {
 				fputs("exiting...", stderr);
 				break;
 			}
-			if (strcmp(buffer, "hello ipc") == 0) {
-				// the app has connect
-				puts("ipc connection detected");
-				write(clientSocket, "welcome", 8);
+			else if (strcmp(buffer, "hello ipc") == 0) {
+				// the app has connected
+				puts("Got IPC Connection!");
+				write(clientSocket, "welcome", 7);
+				// connected = true;
+			}
+			else if (strcmp(buffer, "mcastCopy")) {
+				
 			}
 			
 			i = 0;

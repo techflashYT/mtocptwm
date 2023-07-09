@@ -11,7 +11,9 @@ extern void NET_Init();
 extern void NET_Loop(const char *message, const bool mode);
 extern void PLAT_Init(int *argc, char *argv[]);
 extern void ARG_Init(int argc, char *argv[], char *evnp[]);
+extern void GUI_Init(char *envp[]);
 bool mode;
+bool doGUI;
 #include <mtocptwm.h>
 
 int main(int argc, char *argv[], char *envp[]) {
@@ -24,6 +26,9 @@ int main(int argc, char *argv[], char *envp[]) {
 	// TODO: Listen for connections on a TCP port (find an open port, or if not possible, ask the firewall to let us through (MS firewall, or UPnP if router)), then put the IP and port here
 	sprintf(message, "__mtocptwm__/HELLO\nName: %s\nPort: %d", netInfo.name, netInfo.localListenPort);
 
+	if (doGUI) {
+		GUI_Init(envp);
+	}
 	NET_Loop(message, mode);
 	PLAT_Exit(false);
 }

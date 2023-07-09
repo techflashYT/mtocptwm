@@ -8,14 +8,9 @@
 #endif
 
 #include <string.h>
-#include <ipc.h>
 
-
-extern void NET_SetupIPCLocalhost();
-
-extern int GUI_Main(char *envp[]);
 extern bool mode;
-
+extern bool doGUI;
 
 void ARG_Init(int argc, char *argv[], char *envp[]) {
 	bool badArgs = false;
@@ -31,22 +26,6 @@ void ARG_Init(int argc, char *argv[], char *envp[]) {
 	}
 	// no args, handle GUI stuff
 	if (argc == 1) {
-		NET_SetupIPCLocalhost();
-
-		pid_t pid = fork();
-		if (pid == -1) {
-			// error
-			perror("fork");
-			exit(1);
-		}
-		if (pid == 0) {
-			childSetup();
-			communicate();
-		}
-		if (pid >= 1) {
-			// parent
-			GUI_Main(envp);
-			exit(0);
-		}
+		doGUI = true;
 	}
 }
