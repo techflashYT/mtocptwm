@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <ipc.h>
+#include <mtocptwm.h>
 
 extern void NET_SetupIPCLocalhost();
 

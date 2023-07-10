@@ -29,8 +29,8 @@ extern struct sockaddr_in addr;
 
 #include <mtocptwm.h>
 
-static void NET_Tx(const char *message, const uint_fast8_t attempts, const uint_fast8_t delaySec);
-static int NET_Rx(const uint_fast8_t attempts, const uint_fast8_t timeoutSec);
+static void NET_Tx(const char *message, const uint_fast8_t delaySec);
+static int NET_Rx(char *msg, const uint_fast8_t attempts, const uint_fast8_t timeoutSec);
 
 /* TODO: complete redesign
 
@@ -39,40 +39,40 @@ static int NET_Rx(const uint_fast8_t attempts, const uint_fast8_t timeoutSec);
 	- timeout of specified seconds for NET_Rx
 	- general cleanup
 */
-void NET_Go(const char *message, const bool mode, const uint_fast8_t attempts, const uint_fast8_t delaySec) {
+void NET_Go(char *message, const bool mode, const uint_fast8_t attempts, const uint_fast8_t delaySec) {
 	if (mode == false) {
-		NET_Tx(message, attempts, delaySec);
+		NET_Tx(message, delaySec);
 	}
 	else {
-		NET_Rx(attempts, delaySec);
+		NET_Rx(message, attempts, delaySec);
 	}
 }
+static uint_fast64_t NET_NumPkt = 0;
 
-
-static void NET_Tx(const char *message, const uint_fast8_t attempts, const uint_fast8_t delaySec) {
+static void NET_Tx(const char *message, const uint_fast8_t delaySec) {
 	addr.sin_addr.s_addr = inet_addr(netInfo.multicastIP);
-	for (uint_fast8_t i = 0; i != attempts; i++) {
-		char buf[128];
+	char buf[128];
 
-		uint32_t *tmp = (uint32_t *)&buf[0];
-		memcpy(buf + 4, message, 124);
+	uint32_t *tmp = (uint32_t *)&buf[0];
+	memcpy(buf + 4, message, 124);
 
-		*tmp = i;
+	*tmp = NET_NumPkt;
+	NET_NumPkt++;
 
-		printf("sending #%d\n", i);
-		int result = sendto(netInfo.socket, buf, 128, 0, (struct sockaddr *) &addr, sizeof(addr));
-		if (result < 0) {
-			perror("sendto err");
-			printf("\r\nreturn value: %d\r\n", result);
+	printf("sending packet #%ld\n", NET_NumPkt);
+	int result = sendto(netInfo.socket, buf, 128, 0, (struct sockaddr *) &addr, sizeof(addr));
+	if (result < 0) {
+		perror("sendto err");
+		printf("\r\nreturn value: %d\r\n", result);
 
-			PLAT_Exit(true);
-		}
-		PLAT_TxLoop(delaySec);
+		PLAT_Exit(true);
 	}
+	PLAT_TxLoop(delaySec);
 }
 
 
-static int NET_Rx(const uint_fast8_t attempts, const uint_fast8_t timeoutSec) {
+static int NET_Rx(char *msg, const uint_fast8_t attempts, const uint_fast8_t timeoutSec) {
+	printf("waiting for data with %d attempts and %ds timeout\r\n", attempts, timeoutSec);
 	#if __SWITCH__
 	puts("This option is broken on Switch!!!\r\nIt simply will not work correctly.");
 	consoleUpdate(NULL);
@@ -110,6 +110,7 @@ static int NET_Rx(const uint_fast8_t attempts, const uint_fast8_t timeoutSec) {
 	timeout.tv_usec = 0;
 
 	for (uint_fast8_t i = 0; i != attempts; i++) {
+		printf("waiting for data, attempt #%d...\r\n", attempts);
 		// Wait for activity on the socket with the specified timeout
 		int activity = select(netInfo.socket + 1, &readFds, NULL, NULL, &timeout);
 		if (activity == -1) {
@@ -126,10 +127,11 @@ static int NET_Rx(const uint_fast8_t attempts, const uint_fast8_t timeoutSec) {
 			printf("\r\nreturn value: %d\r\n", ret);
 			PLAT_Exit(true);
 		}
-		int pktNum = *((uint32_t *)&buf[0]);
-		printf("%s: message #%d = \"%s\"\n", inet_ntoa(addr.sin_addr), pktNum, &buf[4]);
+		// int pktNum = *((uint32_t *)&buf[0]);
+		strcpy(msg, &buf[4]);
 		#if __SWITCH__
 		consoleUpdate(NULL);
 		#endif
 	}
+	return 0;
 }
