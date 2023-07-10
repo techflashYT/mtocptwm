@@ -3,7 +3,6 @@
 extern int shouldExit;
 PadState pad;
 void PLAT_Init(int *argc, char *argv[]) {
-void PLAT_Init(int *argc, char *argv[]) {
 	socketInitializeDefault();
 	nxlinkStdio();
 	puts("\x1b[1;1H\x1b[2JNXLink test!!");
