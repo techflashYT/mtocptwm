@@ -22,11 +22,11 @@ win: windows
 windows: win64
 win64:
 	@$(info Building for platform: $(platStr_Win64))
-	@$(MAKE) --quiet $(MAKEFLAGS) all_win PLAT_WIN=1 PLAT_WIN64=1 
+	@$(MAKE) --quiet all_win PLAT_WIN=1 PLAT_WIN64=1 
 
 win32:
 	@$(info Building for platform: $(platStr_Win32))
-	@$(MAKE) --quiet $(MAKEFLAGS) all_win PLAT_WIN=1 PLAT_WIN32=1 
+	@$(MAKE) --quiet all_win PLAT_WIN=1 PLAT_WIN32=1 
 
 all_win: bin/mtocptwm
 	@$(info Successfully built for $(platStr_Win)!)

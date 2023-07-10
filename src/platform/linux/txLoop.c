@@ -1,4 +1,5 @@
 #include <unistd.h>
-void PLAT_TxLoop() {
-	sleep(5);
+#include <stdint.h>
+void PLAT_TxLoop(const uint_fast8_t delaySec) {
+	sleep(delaySec);
 }

@@ -3,6 +3,7 @@
 #endif
 
 #include <windows.h>
-void PLAT_TxLoop() {
-	Sleep(5000);
+#include <stdint.h>
+void PLAT_TxLoop(const uint_fast8_t delaySec) {
+	Sleep(delaySec * 1000);
 }

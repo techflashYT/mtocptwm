@@ -15,6 +15,6 @@ void PLAT_Init(__attribute__((unused)) int *argc, __attribute__((unused)) char *
 	int res = WSAStartup(MAKEWORD(2,2), &wsaData);
 	if (res != 0) {
 		printf("platformInit_win: WSAStartup failed: %d\n", res);
-		exit(1);
+		PLAT_Exit(true);
 	}
 }
