@@ -78,6 +78,7 @@ static int NET_Rx(char *msg, const uint_fast8_t attempts, const uint_fast8_t tim
 	consoleUpdate(NULL);
 	sleep(2);
 	PLAT_Exit(true);
+	PLAT_Exit(true);
 	#endif
 
 	char buf[128];
@@ -86,6 +87,7 @@ static int NET_Rx(char *msg, const uint_fast8_t attempts, const uint_fast8_t tim
 		perror("bind");
 		printf("\r\nreturn value: %d\r\n", ret);
 
+		PLAT_Exit(true);
 		PLAT_Exit(true);
 	}
 	#if PLAT_LINUX || __SWITCH__
@@ -97,6 +99,7 @@ static int NET_Rx(char *msg, const uint_fast8_t attempts, const uint_fast8_t tim
 			perror("setsockopt mreq");
 			printf("\r\nreturn value: %d\r\n", ret);
 			
+			PLAT_Exit(true);
 			PLAT_Exit(true);
 		}
 	#endif

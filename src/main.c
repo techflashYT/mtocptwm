@@ -7,12 +7,9 @@
 #include <stdlib.h>
 #endif
 
-extern void NET_Init();
-extern void PLAT_Init(int *argc, char *argv[]);
-extern void ARG_Init(int argc, char *argv[]);
-extern void GUI_Init(char *envp[]);
-bool mode;
-bool doGUI;
+extern void setupNet();
+extern void broadcastLoop(const char *message, const bool mode);
+extern void platformInit(int *argc, char *argv[]);
 #include <mtocptwm.h>
 
 int main(int argc, char *argv[], char *envp[]) {
@@ -22,8 +19,6 @@ int main(int argc, char *argv[], char *envp[]) {
 
 	// TODO: Listen for connections on a TCP port (find an open port, or if not possible, ask the firewall to let us through (MS firewall, or UPnP if router)), then put the IP and port here
 
-	if (doGUI) {
-		GUI_Init(envp);
-	}
-	PLAT_Exit(false);
+	broadcastLoop(message, mode);
+	platformExit(false);
 }
