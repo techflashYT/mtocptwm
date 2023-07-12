@@ -6,7 +6,7 @@ includes = $(shell find -O3 src/include)
 vpath %.c src
 vpath %.h src/include
 
-compile=$(patsubst src/%.c,build/%.o,$(shell find -O3 src -name '*.c' | grep -v 'platform/'))
+compile=$(patsubst src/%.c,build/%.o,$(shell find -O3 src -name '*.c' | grep -v 'platform/' | grep -v 'src/gui/node_modules'))
 default: linux
 include util/strings.mk
 include util/plat/*.mk

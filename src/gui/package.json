@@ -35,6 +35,7 @@
     "semver": "latest"
   },
   "dependencies": {
+    "deasync": "^0.1.28",
     "electron-squirrel-startup": "latest",
     "xmldom": "latest"
   }

@@ -15,4 +15,4 @@ typedef struct {
 
 extern netInfo_t netInfo;
 extern void __attribute__ ((noreturn)) PLAT_Exit(bool err);
-extern void PLAT_TxLoop(const uint_fast8_t delaySec);
+extern void PLAT_RxLoop(const uint_fast8_t delaySec);

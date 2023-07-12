@@ -17,7 +17,7 @@ const createWindow = () => {
 
 	win.loadFile('index.html')
 }
-app.on("quit", () => {
+app.on("will-quit", () => {
 	ipcSock.write("exit\0");
 	ipcSock.destroy();
 })

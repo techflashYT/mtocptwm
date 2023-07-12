@@ -11,7 +11,7 @@ static int serverSocket, clientSocket;
 static struct sockaddr_in serverAddr, clientAddr;
 static socklen_t addrLen = sizeof(struct sockaddr_in);
 
-extern void NET_Go(char *message, const bool mode, const uint_fast8_t attempts, const uint_fast8_t delaySec);
+extern void NET_Go(char *message, const bool mode, const uint_fast8_t attempt, const uint_fast8_t delaySec);
 
 void NET_SetupIPCLocalhost() {
 	// Create socket
@@ -96,8 +96,10 @@ void communicate() {
 				char message[124];
 				sprintf(message, "__mtocptwm__/HELLO\nName: %s\nPort: %d", netInfo.name, netInfo.localListenPort);
 				// send it once, then read
-				NET_Go(message, false, 1, 0);
-				NET_Go(message, true, 3, 5);
+				for (uint_fast8_t i = 0; i != 3; i++) {
+					NET_Go(message, false, 0, 0);
+					NET_Go(message, true, i, 3);
+				}
 			}
 			else {
 				fputs("bad cmd\r\n", stderr);

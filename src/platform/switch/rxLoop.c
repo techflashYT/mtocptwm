@@ -2,8 +2,8 @@
 #include <nswitch.h>
 #include <mtocptwm.h>
 #include <stdint.h>
-void PLAT_TxLoop(const uint_fast8_t delaySec) {
-	for (uint_fast8_t i = 0; i != 5; i++) {
+void PLAT_RxLoop(const uint_fast8_t delaySec) {
+	for (uint_fast8_t i = 0; i != delaySec; i++) {
 		for (uint_fast8_t i2 = 0; i2 != 59; i2++) {
 			if (!appletMainLoop()) {
 				PLAT_Exit(false);
